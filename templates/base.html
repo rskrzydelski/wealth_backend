@@ -3,10 +3,121 @@
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}home{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/app.css' %}">
+
+    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
 </head>
 <body>
-Home page
-{% block content %}
-{% endblock %}
+    <!-- jQuery CDN - Slim version (=without AJAX) -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <!-- Popper.JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+
+    <div class="wrapper">
+        <nav id="sidebar">
+            <div class="sidebar-header">
+                <h3>Wealth</h3>
+            </div>
+
+            <ul class="list-unstyled components">
+                <p>AFFLUENCE</p>
+                <li>
+                    <a href="#metals" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Precious metal</a>
+                    <ul class="collapse list-unstyled" id="metals">
+                        <li>
+                            <a href="#">Gold</a>
+                        </li>
+                        <li>
+                            <a href="#">Silver</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#land" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Lands</a>
+                    <ul class="collapse list-unstyled" id="land">
+                        <li>
+                            <a href="#">agricultural plot</a>
+                        </li>
+                        <li>
+                            <a href="#">building plot</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#cash" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Cash</a>
+                    <ul class="collapse list-unstyled" id="cash">
+                        <li>
+                            <a href="#">PLN</a>
+                        </li>
+                        <li>
+                            <a href="#">EUR</a>
+                        </li>
+                        <li>
+                            <a href="#">USD</a>
+                        </li>
+                        <li>
+                            <a href="#">CHF</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+
+        <div id="content">
+            <nav class="navbar navbar-dark bg-dark">
+                <div class="container-fluid">
+                    <div>main title</div>
+                </div>
+            </nav>
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="card text-white bg-warning mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">Gold</h5>
+                            <h6 class="card-text">With supporting text below as a natural lead-in to additional content.</h6>
+                            <img src="{% static 'img/gold_ico.png' %}" alt="gold" height="92" width="102">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="card bg-light mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">Silver</h5>
+                            <h6 class="card-text">With supporting text below as a natural lead-in to additional content.</h6>
+                            <img src="{% static 'img/silver_ico.png' %}" alt="silver" height="92" width="102">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="card text-white bg-dark mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">Platinum</h5>
+                            <h6 class="card-text">With supporting text below as a natural lead-in to additional content.</h6>
+                            <img src="{% static 'img/platinum_ico.png' %}" alt="platinum" height="92" width="102">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="card text-white bg-primary mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">Cash</h5>
+                            <h6 class="card-text">With supporting text below as a natural lead-in to additional content.</h6>
+                            <img src="{% static 'img/cash_ico.png' %}" alt="cash" height="92" width="102">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% block content %}
+    {% endblock %}
 </body>
 </html>
