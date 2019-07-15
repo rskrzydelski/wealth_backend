@@ -1,6 +1,7 @@
-from django.urls import path, include
-from .views import resource_view
+from django.urls import path, re_path, include
+from .views import wallet_view
+
 
 urlpatterns = [
-    path('', resource_view, name='resource')
+    path('wallet/', wallet_view, name='wallet'),
 ]

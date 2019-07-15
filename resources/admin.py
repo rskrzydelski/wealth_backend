@@ -1,3 +1,7 @@
 from django.contrib import admin
+from resources.models import Metal
 
-# Register your models here.
+
+admin.site.register(Metal)
+
+

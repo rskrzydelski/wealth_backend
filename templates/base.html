@@ -90,47 +90,9 @@
                     </ul>
                 </div>
             </nav>
-            
-            <div class="row">
-                <div class="col-sm-6">
-                    <div class="card text-white bg-warning mb-3">
-                        <div class="card-body">
-                            <h5 class="card-title">Gold</h5>
-                            <h6 class="card-text">With supporting text below as a natural lead-in to additional content.</h6>
-                            <img src="{% static 'img/gold_ico.png' %}" alt="gold" height="92" width="102">
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-6">
-                    <div class="card bg-light mb-3">
-                        <div class="card-body">
-                            <h5 class="card-title">Silver</h5>
-                            <h6 class="card-text">With supporting text below as a natural lead-in to additional content.</h6>
-                            <img src="{% static 'img/silver_ico.png' %}" alt="silver" height="92" width="102">
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-6">
-                    <div class="card text-white bg-dark mb-3">
-                        <div class="card-body">
-                            <h5 class="card-title">Platinum</h5>
-                            <h6 class="card-text">With supporting text below as a natural lead-in to additional content.</h6>
-                            <img src="{% static 'img/platinum_ico.png' %}" alt="platinum" height="92" width="102">
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-6">
-                    <div class="card text-white bg-primary mb-3">
-                        <div class="card-body">
-                            <h5 class="card-title">Cash</h5>
-                            <h6 class="card-text">With supporting text below as a natural lead-in to additional content.</h6>
-                            <img src="{% static 'img/cash_ico.png' %}" alt="cash" height="92" width="102">
-                        </div>
-                    </div>
-                </div>
-            </div>
+
+            {% block home %}
+            {% endblock home %}
         </div>
     </div>
     {% endblock %}

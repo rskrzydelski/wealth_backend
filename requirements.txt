@@ -3,3 +3,5 @@ pytz==2019.1
 sqlparse==0.3.0
 django-widget-tweaks==1.4.5
 ipython==7.5.0
+django-mathfilters==0.4.0
+django-money==0.15
