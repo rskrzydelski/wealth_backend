@@ -29,15 +29,15 @@
             </div>
 
             <ul class="list-unstyled components">
-                <p>AFFLUENCE</p>
+                <a href="{% url 'home' %}"><p>Wallet</p></a>
                 <li>
                     <a href="#metals" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Precious metal</a>
                     <ul class="collapse list-unstyled" id="metals">
                         <li>
-                            <a href="#">Gold</a>
+                            <a href="{% url 'resources:gold-list' %}">Gold</a>
                         </li>
                         <li>
-                            <a href="#">Silver</a>
+                            <a href="{% url 'resources:silver-list' %}">Silver</a>
                         </li>
                     </ul>
                 </li>
@@ -91,13 +91,10 @@
                 </div>
             </nav>
 
-            {% block home %}
-            {% endblock home %}
+            {% block content %}
+            {% endblock %}
         </div>
     </div>
-    {% endblock %}
-
-    {% block content %}
-    {% endblock %}
+    {% endblock body %}
 </body>
 </html>

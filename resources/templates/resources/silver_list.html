@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+{% for item in silver_list %}
+<div class="row">
+    <div class="col-sm-6">
+        <div class="card bg-light mb-3">
+            <div class="card-body text-dark">
+                <h5 class="card-title">Silver bought on {{ item.date_of_bought|date:"d M Y" }}</h5>
+                <h6 class="card-text">
+                    Amount {{ item.amount }} {{ item.get_unit_display }}<br>
+                    Bought price : {{ item.bought_price }}
+                </h6>
+                <button type="button" class="btn btn-primary">Edit</button>
+                <button type="button" class="btn btn-danger">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+{% endblock %}
