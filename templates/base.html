@@ -23,55 +23,7 @@
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
     {% block body %}
     <div class="wrapper">
-        <nav id="sidebar">
-            <div class="sidebar-header">
-                <h3>Wealth</h3>
-            </div>
-
-            <ul class="list-unstyled components">
-                <a href="{% url 'home' %}"><p>Wallet</p></a>
-                <li>
-                    <a href="#metals" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Precious metal</a>
-                    <ul class="collapse list-unstyled" id="metals">
-                        <li>
-                            <a href="{% url 'resources:gold-list' %}">Gold</a>
-                        </li>
-                        <li>
-                            <a href="{% url 'resources:silver-list' %}">Silver</a>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="#land" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Lands</a>
-                    <ul class="collapse list-unstyled" id="land">
-                        <li>
-                            <a href="#">agricultural plot</a>
-                        </li>
-                        <li>
-                            <a href="#">building plot</a>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="#cash" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Cash</a>
-                    <ul class="collapse list-unstyled" id="cash">
-                        <li>
-                            <a href="#">PLN</a>
-                        </li>
-                        <li>
-                            <a href="#">EUR</a>
-                        </li>
-                        <li>
-                            <a href="#">USD</a>
-                        </li>
-                        <li>
-                            <a href="#">CHF</a>
-                        </li>
-                    </ul>
-                </li>
-            </ul>
-        </nav>
-
+        {% include 'includes/navigation.html' %}
         <div id="content">
             <nav class="navbar navbar-dark bg-dark">
                 <div class="container-fluid">
