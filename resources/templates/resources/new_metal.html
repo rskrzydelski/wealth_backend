@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block title %} new resource {% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>Add new {{ name }}</h2>
+    <form method="post" novalidate>
+        {% csrf_token %}
+        {% include 'includes/form.html' %}
+        <button type="submit" class="btn btn-success">Add</button>
+    </form>
+</div>
+{% endblock %}

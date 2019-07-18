@@ -2,7 +2,7 @@
 
 {% block content %}
 {% block title %} gold list {% endblock %}
-
+<a class="btn btn-success" href="{% url 'resources:new-metal' 'gold' %}" role="button">Add new</a>
 {% for item in gold_list %}
 <div class="row">
     <div class="col-sm-6">
@@ -13,8 +13,8 @@
                     Amount {{ item.amount }} {{ item.get_unit_display }}<br>
                     Bought price : {{ item.bought_price }}
                 </h6>
-                <button type="button" class="btn btn-primary">Edit</button>
-                <button type="button" class="btn btn-danger">Delete</button>
+                <a class="btn btn-primary" href="{% url 'resources:edit-metal' item.id %}" role="button">Edit</a>
+                <a class="btn btn-danger" href="{% url 'resources:del-metal' item.id %}" role="button">Delete</a>
             </div>
 
         </div>
