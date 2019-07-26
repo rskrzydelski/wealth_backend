@@ -2,7 +2,6 @@
 
 {% block content %}
 {% block title %} gold list {% endblock %}
-<a class="btn btn-success" href="{% url 'resources:new-metal' 'gold' %}" role="button">Add new</a>
 {% for item in gold_list %}
 <div class="row">
     <div class="col-sm-6">
