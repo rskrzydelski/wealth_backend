@@ -1,18 +1,22 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
 from .models import Metal
 from .forms import NewMetalForm, EditMetalForm
 
 
+@login_required
 def gold_list_view(request):
     gold = Metal.objects.filter(name='Au')
     return render(request, 'resources/gold_list.html', context={'gold_list': gold})
 
 
+@login_required
 def silver_list_view(request):
     silver = Metal.objects.filter(name='Ag')
     return render(request, 'resources/silver_list.html', context={'silver_list': silver})
 
 
+@login_required
 def new_metal(request, slug):
     if request.method == 'POST':
         form = NewMetalForm(request.POST)
@@ -41,6 +45,7 @@ def new_metal(request, slug):
     return render(request, 'resources/new_metal.html', context)
 
 
+@login_required
 def delete_metal(request, pk):
     metal = get_object_or_404(Metal, pk=pk)
     if request.method == 'POST':
@@ -53,6 +58,7 @@ def delete_metal(request, pk):
     return render(request, 'resources/confirm_delete.html', context)
 
 
+@login_required
 def edit_metal(request, pk):
     metal = get_object_or_404(Metal, pk=pk)
 
