@@ -12,8 +12,8 @@
                     Amount {{ item.amount }} {{ item.get_unit_display }}<br>
                     Bought price : {{ item.bought_price }}
                 </h6>
-                <a class="btn btn-primary" href="{% url 'resources:edit-metal' item.id %}" role="button">Edit</a>
-                <a class="btn btn-danger" href="{% url 'resources:del-metal' item.id %}" role="button">Delete</a>
+                <a class="btn btn-primary" href="{% url 'resources:edit-metal' item.id %}" role="button">Edit <i class="fas fa-edit"></i></a>
+                <a class="btn btn-danger" href="{% url 'resources:del-metal' item.id %}" role="button">Delete <i class="far fa-minus-square"></i></a>
             </div>
 
         </div>

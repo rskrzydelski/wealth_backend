@@ -8,7 +8,9 @@
 
     <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
     <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
-    {% block stylesheet %}{% endblock %}
+    {% block stylesheet %}
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.10.1/css/all.css" integrity="sha384-wxqG4glGB3nlqX0bi23nmgwCSjWIW13BdLUEYC4VIMehfbcro/ATkyDsF/AbIOVe" crossorigin="anonymous">
+    {% endblock %}
 </head>
 <body>
     <!-- jQuery CDN - Slim version (=without AJAX) -->
@@ -32,8 +34,8 @@
         <div class="collapse navbar-collapse" id="navbarNavDropdown">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
-                    <a class="btn btn-success" href="{% url 'resources:new-metal' 'gold' %}" role="button">Add gold</a>
-                    <a class="btn btn-success" href="{% url 'resources:new-metal' 'silver' %}" role="button">Add silver</a>
+                    <a class="btn btn-success" href="{% url 'resources:new-metal' 'gold' %}" role="button">Add gold <i class="far fa-plus-square"></i></a>
+                    <a class="btn btn-success" href="{% url 'resources:new-metal' 'silver' %}" role="button">Add silver <i class="far fa-plus-square"></i></a>
                 </li>
             </ul>
             <ul class="navbar-nav">
