@@ -28,7 +28,6 @@ def new_metal(request, slug):
                 name = 'Au'
 
             Metal.objects.create(owner=request.user,
-                                 current_price=form.cleaned_data.get('current_price'),
                                  bought_price=form.cleaned_data.get('bought_price'),
                                  date_of_bought=form.cleaned_data.get('date_of_bought'),
                                  name=name,
@@ -65,7 +64,6 @@ def edit_metal(request, pk):
 
     if metal:
         initial_data = {
-            'current_price': metal.current_price,
             'bought_price': metal.bought_price,
             'date_of_bought': metal.date_of_bought,
             'amount': metal.amount,
@@ -79,7 +77,6 @@ def edit_metal(request, pk):
         form = EditMetalForm(request.POST)
 
         if form.is_valid():
-            metal.current_price = form.cleaned_data.get('current_price')
             metal.bought_price = form.cleaned_data.get('bought_price')
             metal.date_of_bought = form.cleaned_data.get('date_of_bought')
             metal.name = form.cleaned_data.get('name')

@@ -3,24 +3,14 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
 
-from resources.models import Metal
+from resources.models import Metal, MarketPrices
 
 
 @login_required(login_url='/accounts/login/')
 def home_view(request):
-    try:
-        crt_price = Metal.objects.filter(owner=request.user, name='Ag')[0].current_price
-    except IndexError:
-        crt_price = 0
-
-    silver_group = Metal(owner=request.user, name='Ag', unit='oz', current_price=crt_price)
-
-    try:
-        crt_price = Metal.objects.filter(owner=request.user, name='Au')[0].current_price
-    except IndexError:
-        crt_price = 0
-
-    gold_group = Metal(owner=request.user, name='Au', unit='oz', current_price=crt_price)
+    prices = MarketPrices.load()
+    silver_group = Metal(owner=request.user, name='Ag', unit='oz')
+    gold_group = Metal(owner=request.user, name='Au', unit='oz')
 
     for silver in Metal.objects.filter(owner=request.user, name='Ag'):
         silver_group.amount += silver.amount
@@ -31,6 +21,7 @@ def home_view(request):
     context = {
         'silver': silver_group,
         'gold': gold_group,
+        'market_prices': prices,
     }
     return render(request, 'home.html', context)
 

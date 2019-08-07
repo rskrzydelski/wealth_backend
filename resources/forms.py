@@ -5,7 +5,6 @@ from .models import Metal
 
 
 class NewMetalForm(forms.Form):
-    current_price = money_forms.MoneyField(max_digits=10, decimal_places=2, default_currency='PLN')
     bought_price = money_forms.MoneyField(max_digits=10, decimal_places=2, default_currency='PLN')
     date_of_bought = forms.DateTimeField()
     amount = forms.DecimalField(min_value=0, max_digits=10, decimal_places=0)

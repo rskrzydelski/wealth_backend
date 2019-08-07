@@ -8,10 +8,10 @@
 <div class="col-sm-6">
     <div class="card text-white bg-warning mb-3">
         <div class="card-body">
-            <h5 class="card-title">Gold</h5>
+            <h5 class="card-title">Gold summary</h5>
             <h6 class="card-text">
-                Summary of my gold:<br>
-                {{ gold.get_name_display }} {{ gold.amount|mul:gold.current_price}} {{ gold.get_unit_display }}
+                Amount: {{ gold.amount }} {{ gold.get_unit_display }}<br>
+                Value:  {{ gold.amount|mul:market_prices.au_sell_rate }}
             </h6>
             <img src="{% static 'img/gold_ico.png' %}" alt="gold" height="92" width="102">
         </div>
@@ -20,10 +20,10 @@
 <div class="col-sm-6">
     <div class="card bg-light mb-3">
             <div class="card-body">
-                <h5 class="card-title">Silver</h5>
+                <h5 class="card-title">Silver summary</h5>
                 <h6 class="card-text">
-                    Summary of my silver:<br>
-                    {{ silver.get_name_display }} {{ silver.amount|mul:silver.current_price}} {{ silver.get_unit_display }}
+                    Amount: {{ silver.amount }} {{ silver.get_unit_display }}<br>
+                    Value:  {{ silver.amount|mul:market_prices.ag_sell_rate }}
                 </h6>
                 <img src="{% static 'img/silver_ico.png' %}" alt="silver" height="92" width="102">
             </div>
@@ -34,10 +34,10 @@
     <div class="col-sm-6">
         <div class="card text-white bg-dark mb-3">
             <div class="card-body">
-                <h5 class="card-title">Platinum</h5>
+                <h5 class="card-title">Platinum summary</h5>
                 <h6 class="card-text">
-                    Summary of my platinum:<br>
-                    0 ounce
+                    Amount: 0<br>
+                    Value: 0
                 </h6>
                 <img src="{% static 'img/platinum_ico.png' %}" alt="platinum" height="92" width="102">
             </div>
@@ -46,7 +46,7 @@
     <div class="col-sm-6">
         <div class="card text-white bg-primary mb-3">
             <div class="card-body">
-                <h5 class="card-title">Cash</h5>
+                <h5 class="card-title">Cash summary</h5>
                 <h6 class="card-text">
                     My cash:<br>
                     0 zl
