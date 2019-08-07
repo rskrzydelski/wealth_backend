@@ -9,23 +9,23 @@ from resources.models import Metal
 @login_required(login_url='/accounts/login/')
 def home_view(request):
     try:
-        crt_price = Metal.objects.filter(name='Ag')[0].current_price
+        crt_price = Metal.objects.filter(owner=request.user, name='Ag')[0].current_price
     except IndexError:
         crt_price = 0
 
-    silver_group = Metal(name='Ag', unit='oz', current_price=crt_price)
+    silver_group = Metal(owner=request.user, name='Ag', unit='oz', current_price=crt_price)
 
     try:
-        crt_price = Metal.objects.filter(name='Au')[0].current_price
+        crt_price = Metal.objects.filter(owner=request.user, name='Au')[0].current_price
     except IndexError:
         crt_price = 0
 
-    gold_group = Metal(name='Au', unit='oz', current_price=crt_price)
+    gold_group = Metal(owner=request.user, name='Au', unit='oz', current_price=crt_price)
 
-    for silver in Metal.objects.filter(name='Ag'):
+    for silver in Metal.objects.filter(owner=request.user, name='Ag'):
         silver_group.amount += silver.amount
 
-    for gold in Metal.objects.filter(name='Au'):
+    for gold in Metal.objects.filter(owner=request.user, name='Au'):
         gold_group.amount += gold.amount
 
     context = {

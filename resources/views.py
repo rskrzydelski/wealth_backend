@@ -6,13 +6,13 @@ from .forms import NewMetalForm, EditMetalForm
 
 @login_required
 def gold_list_view(request):
-    gold = Metal.objects.filter(name='Au')
+    gold = Metal.objects.filter(owner=request.user, name='Au')
     return render(request, 'resources/gold_list.html', context={'gold_list': gold})
 
 
 @login_required
 def silver_list_view(request):
-    silver = Metal.objects.filter(name='Ag')
+    silver = Metal.objects.filter(owner=request.user, name='Ag')
     return render(request, 'resources/silver_list.html', context={'silver_list': silver})
 
 
@@ -27,7 +27,8 @@ def new_metal(request, slug):
             else:
                 name = 'Au'
 
-            Metal.objects.create(current_price=form.cleaned_data.get('current_price'),
+            Metal.objects.create(owner=request.user,
+                                 current_price=form.cleaned_data.get('current_price'),
                                  bought_price=form.cleaned_data.get('bought_price'),
                                  date_of_bought=form.cleaned_data.get('date_of_bought'),
                                  name=name,
