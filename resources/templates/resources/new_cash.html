@@ -1,14 +1,14 @@
 {% extends 'base.html' %}
 
-{% block title %} edit metal {% endblock %}
+{% block title %} new cash {% endblock %}
 
 {% block content %}
 <div class="container">
-    <h2>Edit {{ metal.get_name_display }} </h2>
+    <h2>Add new</h2>
     <form method="post" novalidate>
         {% csrf_token %}
         {% include 'includes/form.html' %}
-        <button type="submit" class="btn btn-success">Edit</button>
+        <button type="submit" class="btn btn-success">Add</button>
     </form>
 </div>
 {% endblock %}

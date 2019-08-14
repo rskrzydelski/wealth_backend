@@ -23,6 +23,9 @@ class SingletonModel(models.Model):
 
 
 class MarketPrices(SingletonModel):
+    """
+    This class can have only one instance. Market price should be unique and it will be fetch from web server
+    """
     gold_price = MoneyField(max_digits=10, decimal_places=2, null=True, default=6300, default_currency='PLN')
     silver_price = MoneyField(max_digits=10, decimal_places=2, null=True, default=88, default_currency='PLN')
     palladium_price = MoneyField(max_digits=10, decimal_places=2, null=True, default=5500, default_currency='PLN')
@@ -40,9 +43,15 @@ class MarketPrices(SingletonModel):
     def gold_silver_ratio(self):
         return self.gold_price / self.silver_price
 
+    def __str__(self):
+        return 'MarketPrice singleton'
+
 
 # data model common for all resources
 class Resource(models.Model):
+    """
+    Common data for resource
+    """
     owner = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
     bought_price = MoneyField(max_digits=10, decimal_places=2, null=True, default_currency='PLN')
     date_of_bought = models.DateTimeField(auto_now_add=False)
@@ -54,11 +63,12 @@ class Resource(models.Model):
 
 # data model common for all metals
 class Metal(Resource):
+    """
+    Precious metals data
+    """
     METAL_CHOICES = [
         ('Ag', 'Silver'),
         ('Au', 'Gold'),
-        ('Pd', 'Palladium'),
-        ('Pt', 'Platinum'),
     ]
     UNIT_CHOICES = [
         ('oz', 'ounce'),
@@ -74,18 +84,33 @@ class Metal(Resource):
                             choices=UNIT_CHOICES,
                             default='oz')
 
+    @classmethod
+    def get_metal_list(cls, owner, name):
+        return cls.objects.filter(owner=owner, name=name)
+
     def __str__(self):
         return self.get_name_display()
 
 
-# class Cash(models.Model):
-#     CURRENCY_CHOICES = [('USD', 'USD $'), ('EUR', 'EUR €'), ('PLN', 'PLN ZŁ')]
-#     currency = models.CharField(
-#         max_length=10,
-#         choices=CURRENCY_CHOICES,
-#         default='PLN',
-#     )
+class Cash(Resource):
+    CURRENCY_CHOICES = [('USD', 'USD $'), ('EUR', 'EUR €'), ('PLN', 'PLN ZŁ'), ('CHF', 'CHF')]
+    currency = models.CharField(
+        max_length=10,
+        choices=CURRENCY_CHOICES,
+        default='CHF',
+    )
+    my_currency = models.CharField(
+        max_length=10,
+        choices=CURRENCY_CHOICES,
+        default='PLN',
+    )
 
+    @classmethod
+    def get_cash_list(cls, owner, currency):
+        return cls.objects.filter(owner=owner, currency=currency)
+
+    def __str__(self):
+        return self.currency
 
 # class Land(Resource):
 #     LAND_CHOICES = [
@@ -103,10 +128,3 @@ class Metal(Resource):
 #     area_unit = models.CharField(max_length=10,
 #                                  choices=AREA_TYPE,
 #                                  default='h')
-
-
-# class Wallet(models.Model):
-#     models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
-#     metal = models.ManyToManyField(Metal)
-#     cash = models.ManyToManyField(Cash)
-#

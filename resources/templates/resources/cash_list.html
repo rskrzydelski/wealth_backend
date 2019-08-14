@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+{% block title %} cash list {% endblock %}
+{% for item in cash_list %}
+<div class="row">
+    <div class="col-sm-6">
+        <div class="card bg-light mb-3">
+            <div class="card-body text-dark">
+                <h5 class="card-title">{{ item.get_currency_display }} bought on {{ item.date_of_bought|date:"d M Y" }}</h5>
+                <h6 class="card-text">
+                    Amount {{ item.amount }} {{ item.get_currency_display }}<br>
+                    {% if item.my_currency  != item.currency %}
+                        Bought price : {{ item.bought_price }}
+                    {% endif %}
+                </h6>
+                <a class="btn btn-primary" href="{% url 'resources:edit-cash' item.id %}" role="button">Edit</a>
+                <a class="btn btn-danger" href="{% url 'resources:del-cash' item.id %}" role="button">Delete</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+{% endblock %}

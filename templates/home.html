@@ -5,22 +5,22 @@
 
 {% block content %}
 <div class="row">
-<div class="col-sm-6">
-    <div class="card text-white bg-warning mb-3">
-        <div class="card-body">
-            <h5 class="card-title">Gold summary</h5>
-            <h6 class="card-text">
-                Amount: {{ gold.amount }} {{ gold.get_unit_display }}<br>
-                Value:  {{ gold.amount|mul:market_prices.au_sell_rate }}
-            </h6>
-            <img src="{% static 'img/gold_ico.png' %}" alt="gold" height="92" width="102">
+    <div class="col-sm-6">
+        <div class="card text-white bg-warning mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Gold</h5>
+                <h6 class="card-text">
+                    Amount: {{ gold.amount }} {{ gold.get_unit_display }}<br>
+                    Value:  {{ gold.amount|mul:market_prices.au_sell_rate }}
+                </h6>
+                <img src="{% static 'img/gold_ico.png' %}" alt="gold" height="92" width="102">
+            </div>
         </div>
     </div>
-</div>
-<div class="col-sm-6">
-    <div class="card bg-light mb-3">
+    <div class="col-sm-6">
+        <div class="card bg-light mb-3">
             <div class="card-body">
-                <h5 class="card-title">Silver summary</h5>
+                <h5 class="card-title">Silver</h5>
                 <h6 class="card-text">
                     Amount: {{ silver.amount }} {{ silver.get_unit_display }}<br>
                     Value:  {{ silver.amount|mul:market_prices.ag_sell_rate }}
@@ -32,24 +32,67 @@
 </div>
 <div class="row">
     <div class="col-sm-6">
-        <div class="card text-white bg-dark mb-3">
+        <div class="card text-white bg-primary mb-3">
             <div class="card-body">
-                <h5 class="card-title">Platinum summary</h5>
+                <h5 class="card-title">Cash</h5>
                 <h6 class="card-text">
-                    Amount: 0<br>
-                    Value: 0
+                    <br>Amount: {{ zloty.amount }} PLN<br><br>
                 </h6>
-                <img src="{% static 'img/platinum_ico.png' %}" alt="platinum" height="92" width="102">
+                <img src="{% static 'img/cash_ico.png' %}" alt="cash" height="92" width="102">
             </div>
         </div>
     </div>
     <div class="col-sm-6">
-        <div class="card text-white bg-primary mb-3">
+        <div class="card text-white bg-success mb-3">
             <div class="card-body">
-                <h5 class="card-title">Cash summary</h5>
+                <h5 class="card-title">Lands</h5>
                 <h6 class="card-text">
-                    My cash:<br>
-                    0 zl
+                    Type: ---<br>
+                    Amount: 0<br><br>
+
+                </h6>
+                <img src="{% static 'img/forest.svg' %}" alt="land" height="92" width="102">
+            </div>
+        </div>
+    </div>
+</div>
+<br>
+Currences
+<br>
+<div class="row">
+    <div class="col-sm-6">
+        <div class="card text-white bg-success mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Dollar</h5>
+                <h6 class="card-text">
+                    Amount: {{ dollar.amount }} USD<br>
+                    Value:
+                </h6>
+                <img src="{% static 'img/cash_ico.png' %}" alt="cash" height="92" width="102">
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="card text-white bg-info mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Euro</h5>
+                <h6 class="card-text">
+                    Amount: {{ euro.amount }} EUR<br>
+                    Value:
+                </h6>
+                <img src="{% static 'img/cash_ico.png' %}" alt="cash" height="92" width="102">
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-6">
+        <div class="card text-white bg-danger mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Franc</h5>
+                <h6 class="card-text">
+                    Amount: {{ franc.amount }} USD<br>
+                    Value:
                 </h6>
                 <img src="{% static 'img/cash_ico.png' %}" alt="cash" height="92" width="102">
             </div>
