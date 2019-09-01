@@ -92,17 +92,15 @@ def edit_metal(request, pk):
         initial_data = {}
 
     if request.method == 'POST':
-        form = EditMetalForm(request.POST)
 
+        form = EditMetalForm(request.POST)
         if form.is_valid():
             metal.bought_price = form.cleaned_data.get('bought_price')
             metal.date_of_bought = form.cleaned_data.get('date_of_bought')
             metal.name = form.cleaned_data.get('name')
             metal.amount = form.cleaned_data.get('amount')
             metal.unit = form.cleaned_data.get('unit')
-
             metal.save()
-
         return redirect('resources:metal-list', slug=metal.name)
     form = EditMetalForm(initial=initial_data)
     return render(request, 'resources/edit_resource.html', {'form': form, 'metal': metal})
