@@ -32,17 +32,6 @@
 </div>
 <div class="row">
     <div class="col-sm-6">
-        <div class="card text-white bg-primary mb-3">
-            <div class="card-body">
-                <h5 class="card-title">Cash</h5>
-                <h6 class="card-text">
-                    <br>Amount: {{ zloty.amount }} PLN<br><br>
-                </h6>
-                <img src="{% static 'img/cash_ico.png' %}" alt="cash" height="92" width="102">
-            </div>
-        </div>
-    </div>
-    <div class="col-sm-6">
         <div class="card text-white bg-success mb-3">
             <div class="card-body">
                 <h5 class="card-title">Lands</h5>
@@ -66,7 +55,6 @@ Currences
                 <h5 class="card-title">Dollar</h5>
                 <h6 class="card-text">
                     Amount: {{ dollar.amount }} USD<br>
-                    Value:
                 </h6>
                 <img src="{% static 'img/cash_ico.png' %}" alt="cash" height="92" width="102">
             </div>
@@ -78,7 +66,6 @@ Currences
                 <h5 class="card-title">Euro</h5>
                 <h6 class="card-text">
                     Amount: {{ euro.amount }} EUR<br>
-                    Value:
                 </h6>
                 <img src="{% static 'img/cash_ico.png' %}" alt="cash" height="92" width="102">
             </div>
@@ -92,7 +79,17 @@ Currences
                 <h5 class="card-title">Franc</h5>
                 <h6 class="card-text">
                     Amount: {{ franc.amount }} USD<br>
-                    Value:
+                </h6>
+                <img src="{% static 'img/cash_ico.png' %}" alt="cash" height="92" width="102">
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="card text-white bg-primary mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Zloty</h5>
+                <h6 class="card-text">
+                    Amount: {{ zloty.amount }} PLN<br>
                 </h6>
                 <img src="{% static 'img/cash_ico.png' %}" alt="cash" height="92" width="102">
             </div>

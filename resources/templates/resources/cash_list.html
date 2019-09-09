@@ -11,7 +11,7 @@
                 <h5 class="card-title">{{ item.get_currency_display }} bought on {{ item.date_of_bought|date:"d M Y" }}</h5>
                 <h6 class="card-text">
                     Amount {{ item.amount }} {{ item.get_currency_display }}<br>
-                    {% if item.my_currency  != item.currency %}
+                    {% if  item.bought_price %}
                         Bought price : {{ item.bought_price }}
                     {% endif %}
                 </h6>

@@ -53,7 +53,7 @@ class Resource(models.Model):
     Common data for resource
     """
     owner = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
-    bought_price = MoneyField(max_digits=10, decimal_places=2, null=True, default_currency='PLN')
+    bought_price = MoneyField(max_digits=10, decimal_places=2, null=True, blank=True, default_currency='PLN')
     date_of_bought = models.DateTimeField(auto_now_add=False)
     amount = models.DecimalField(max_digits=10, decimal_places=0, default=0)
 
@@ -98,11 +98,6 @@ class Cash(Resource):
         max_length=10,
         choices=CURRENCY_CHOICES,
         default='CHF',
-    )
-    my_currency = models.CharField(
-        max_length=10,
-        choices=CURRENCY_CHOICES,
-        default='PLN',
     )
 
     @classmethod

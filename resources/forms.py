@@ -14,8 +14,14 @@ class EditMetalForm(NewMetalForm):
 
 
 class NewCashForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(NewCashForm, self).__init__(*args, **kwargs)
+        self.fields['bought_price'].required = False
+
     class Meta:
         model = Cash
-        fields = ['bought_price', 'date_of_bought', 'amount', 'my_currency', 'currency']
-
+        fields = ['bought_price', 'date_of_bought', 'amount', 'currency']
+        labels = {
+            'bought_price': 'Bought price (not required, fill only if you bought in currency exchange)'
+        }
 

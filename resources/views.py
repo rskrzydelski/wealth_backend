@@ -115,7 +115,6 @@ def edit_cash(request, pk):
             'bought_price': cash.bought_price,
             'date_of_bought': cash.date_of_bought,
             'amount': cash.amount,
-            'my_currency': cash.my_currency,
             'currency': cash.currency,
         }
     else:
@@ -128,7 +127,6 @@ def edit_cash(request, pk):
             cash.bought_price = form.cleaned_data.get('bought_price')
             cash.date_of_bought = form.cleaned_data.get('date_of_bought')
             cash.amount = form.cleaned_data.get('amount')
-            cash.my_currency = form.cleaned_data.get('my_currency')
             cash.currency = form.cleaned_data.get('currency')
 
             cash.save()
