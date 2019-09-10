@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import Sum
 from django.contrib.auth.models import User
 
 from djmoney.models.fields import MoneyField
@@ -88,6 +89,11 @@ class Metal(Resource):
     def get_metal_list(cls, owner, name):
         return cls.objects.filter(owner=owner, name=name)
 
+    @classmethod
+    def get_total_metal_oz(cls, owner=None, name='Ag'):
+        total_oz = cls.objects.filter(owner=owner, name=name, unit='oz').aggregate(amount=Sum('amount'))
+        return total_oz['amount']
+
     def __str__(self):
         return self.get_name_display()
 
@@ -103,6 +109,11 @@ class Cash(Resource):
     @classmethod
     def get_cash_list(cls, owner, currency):
         return cls.objects.filter(owner=owner, currency=currency)
+
+    @classmethod
+    def get_total_cash(cls, owner=None, currency='PLN'):
+        total_cash = cls.objects.filter(owner=owner, currency=currency).aggregate(amount=Sum('amount'))
+        return total_cash['amount']
 
     def __str__(self):
         return self.currency

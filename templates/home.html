@@ -10,8 +10,8 @@
             <div class="card-body">
                 <h5 class="card-title">Gold</h5>
                 <h6 class="card-text">
-                    Amount: {{ gold.amount }} {{ gold.get_unit_display }}<br>
-                    Value:  {{ gold.amount|mul:market_prices.au_sell_rate }}
+                    Amount: {{ total_gold }} oz<br>
+                    Value:  {{ total_gold|mul:market_prices.au_sell_rate }}
                 </h6>
                 <img src="{% static 'img/gold_ico.png' %}" alt="gold" height="92" width="102">
             </div>
@@ -22,8 +22,8 @@
             <div class="card-body">
                 <h5 class="card-title">Silver</h5>
                 <h6 class="card-text">
-                    Amount: {{ silver.amount }} {{ silver.get_unit_display }}<br>
-                    Value:  {{ silver.amount|mul:market_prices.ag_sell_rate }}
+                    Amount: {{ total_silver }} oz<br>
+                    Value:  {{ total_silver|mul:market_prices.ag_sell_rate }}
                 </h6>
                 <img src="{% static 'img/silver_ico.png' %}" alt="silver" height="92" width="102">
             </div>
@@ -38,7 +38,6 @@
                 <h6 class="card-text">
                     Type: ---<br>
                     Amount: 0<br><br>
-
                 </h6>
                 <img src="{% static 'img/forest.svg' %}" alt="land" height="92" width="102">
             </div>
@@ -54,7 +53,7 @@ Currences
             <div class="card-body">
                 <h5 class="card-title">Dollar</h5>
                 <h6 class="card-text">
-                    Amount: {{ dollar.amount }} USD<br>
+                    Amount: {{ total_dollar }} USD<br>
                 </h6>
                 <img src="{% static 'img/cash_ico.png' %}" alt="cash" height="92" width="102">
             </div>
@@ -65,7 +64,7 @@ Currences
             <div class="card-body">
                 <h5 class="card-title">Euro</h5>
                 <h6 class="card-text">
-                    Amount: {{ euro.amount }} EUR<br>
+                    Amount: {{ total_euro }} EUR<br>
                 </h6>
                 <img src="{% static 'img/cash_ico.png' %}" alt="cash" height="92" width="102">
             </div>
@@ -78,7 +77,7 @@ Currences
             <div class="card-body">
                 <h5 class="card-title">Franc</h5>
                 <h6 class="card-text">
-                    Amount: {{ franc.amount }} USD<br>
+                    Amount: {{ total_franc }} CHF<br>
                 </h6>
                 <img src="{% static 'img/cash_ico.png' %}" alt="cash" height="92" width="102">
             </div>
@@ -89,7 +88,7 @@ Currences
             <div class="card-body">
                 <h5 class="card-title">Zloty</h5>
                 <h6 class="card-text">
-                    Amount: {{ zloty.amount }} PLN<br>
+                    Amount: {{ total_zloty }} PLN<br>
                 </h6>
                 <img src="{% static 'img/cash_ico.png' %}" alt="cash" height="92" width="102">
             </div>
