@@ -85,6 +85,8 @@ class Metal(Resource):
                             choices=UNIT_CHOICES,
                             default='oz')
 
+    description = models.TextField(blank=True, help_text='Type some information about this transaction (optional)')
+
     @classmethod
     def get_metal_list(cls, owner, name):
         return cls.objects.filter(owner=owner, name=name)

@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="col-sm-6">
+        <div class="card bg-light mb-3">
+            <div class="card-body text-dark">
+                <h5 class="card-title">{{ cash.get_currency_display }} bought on {{ cash.date_of_bought|date:"d M Y" }}</h5>
+                <h6 class="card-text">
+                    Amount {{ cash.amount }} {{ metal.get_currency_display }}<br>
+                    Bought price : {{ cash.bought_price }}<br>
+                </h6>
+                <a class="btn btn-primary" href="{% url 'resources:edit-metal' metal.id %}" role="button">Edit</a>
+                <a class="btn btn-danger" href="{% url 'resources:del-metal' metal.id %}" role="button">Delete</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

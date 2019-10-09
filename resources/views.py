@@ -18,6 +18,18 @@ def cash_list(request, slug):
 
 
 @login_required
+def metal_detail(request, pk):
+    metal = get_object_or_404(Metal, pk=pk)
+    return render(request, 'resources/metal_detail.html', {'metal': metal})
+
+
+@login_required
+def cash_detail(request, pk):
+    cash = get_object_or_404(Cash, pk=pk)
+    return render(request, 'resources/cash_detail.html', {'cash': cash})
+
+
+@login_required
 def new_metal(request):
     if request.method == 'POST':
         form = NewMetalForm(request.POST)
@@ -84,9 +96,10 @@ def edit_metal(request, pk):
         initial_data = {
             'bought_price': metal.bought_price,
             'date_of_bought': metal.date_of_bought,
+            'name': metal.name,
             'amount': metal.amount,
             'unit': metal.unit,
-            'name': metal.name,
+            'description': metal.description,
         }
     else:
         initial_data = {}
@@ -100,6 +113,7 @@ def edit_metal(request, pk):
             metal.name = form.cleaned_data.get('name')
             metal.amount = form.cleaned_data.get('amount')
             metal.unit = form.cleaned_data.get('unit')
+            metal.description = form.cleaned_data.get('description')
             metal.save()
         return redirect('resources:metal-list', slug=metal.name)
     form = EditMetalForm(initial=initial_data)
