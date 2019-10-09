@@ -1,6 +1,8 @@
 from django.urls import path, re_path
 from . import views
 
+
+app_name = 'resources'
 urlpatterns = [
     # resource lists
     re_path(r'metal/list/(?P<slug>[-\w]+)/$', views.metal_list, name='metal-list'),
