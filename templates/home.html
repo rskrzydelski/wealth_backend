@@ -10,7 +10,7 @@
             <div class="card-body">
                 <h5 class="card-title">Gold</h5>
                 <h6 class="card-text">
-                    Amount: {{ total_gold }} oz<br>
+                    Amount: {{ total_gold }}<br>
                     Value:  {{ total_gold|mul:market_prices.au_sell_rate }}
                 </h6>
                 <img src="{% static 'img/gold_ico.png' %}" alt="gold" height="92" width="102">
@@ -22,7 +22,7 @@
             <div class="card-body">
                 <h5 class="card-title">Silver</h5>
                 <h6 class="card-text">
-                    Amount: {{ total_silver }} oz<br>
+                    Amount: {{ total_silver }}<br>
                     Value:  {{ total_silver|mul:market_prices.ag_sell_rate }}
                 </h6>
                 <img src="{% static 'img/silver_ico.png' %}" alt="silver" height="92" width="102">

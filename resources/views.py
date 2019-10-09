@@ -7,13 +7,13 @@ from .forms import NewMetalForm, EditMetalForm, NewCashForm
 
 @login_required
 def metal_list(request, slug):
-    metal = Metal.get_metal_list(owner=request.user, name=slug)
+    metal = Metal.objects.get_metal_list(owner=request.user, name=slug)
     return render(request, 'resources/metal_list.html', context={'metal_list': metal})
 
 
 @login_required
 def cash_list(request, slug):
-    cash = Cash.get_cash_list(owner=request.user, currency=slug.upper())
+    cash = Cash.objects.get_cash_list(owner=request.user, currency=slug.upper())
     return render(request, 'resources/cash_list.html', {'cash_list': cash})
 
 

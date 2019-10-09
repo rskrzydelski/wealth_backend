@@ -7,8 +7,8 @@ from resources.models import Metal, Cash, MarketPrices
 @login_required(login_url='/accounts/login/')
 def home_view(request):
     market_prices = MarketPrices.load()
-    total_silver = Metal.get_total_metal_oz(owner=request.user, name='Ag') or 0
-    total_gold = Metal.get_total_metal_oz(owner=request.user, name='Au') or 0
+    total_silver = Metal.objects.get_total_silver(owner=request.user, unit='oz')
+    total_gold = Metal.objects.get_total_gold(owner=request.user, unit='oz')
     total_pln = Cash.get_total_cash(owner=request.user, currency='PLN') or 0
     total_usd = Cash.get_total_cash(owner=request.user, currency='USD') or 0
     total_eur = Cash.get_total_cash(owner=request.user, currency='EUR') or 0

@@ -62,11 +62,26 @@ class Resource(models.Model):
         abstract = True
 
 
+class MetalManager(models.Manager):
+    def get_metal_list(self, owner=None, name='Ag'):
+        return super(MetalManager, self).filter(owner=owner, name=name)
+
+    def get_total_gold(self, owner=None, unit='oz'):
+        total = super(MetalManager, self).filter(owner=owner, name='Au', unit=unit).aggregate(amount=Sum('amount'))
+        return total['amount'] or 0
+
+    def get_total_silver(self, owner=None, unit='oz'):
+        total = super(MetalManager, self).filter(owner=owner, name='Ag', unit=unit).aggregate(amount=Sum('amount'))
+        return total['amount'] or 0
+
+
 # data model common for all metals
 class Metal(Resource):
     """
     Precious metals data
     """
+    objects = MetalManager()
+
     METAL_CHOICES = [
         ('Ag', 'Silver'),
         ('Au', 'Gold'),
@@ -86,15 +101,6 @@ class Metal(Resource):
                             default='oz')
 
     description = models.TextField(blank=True, help_text='Type some information about this transaction (optional)')
-
-    @classmethod
-    def get_metal_list(cls, owner, name):
-        return cls.objects.filter(owner=owner, name=name)
-
-    @classmethod
-    def get_total_metal_oz(cls, owner=None, name='Ag'):
-        total_oz = cls.objects.filter(owner=owner, name=name, unit='oz').aggregate(amount=Sum('amount'))
-        return total_oz['amount']
 
     def __str__(self):
         return self.get_name_display()
