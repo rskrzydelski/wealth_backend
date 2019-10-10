@@ -13,8 +13,8 @@
                         <input type="submit" value='Yes' class="btn btn-danger">
                         {% if 'metal' in request.path %}
                             <a href="{% url 'resources:metal-list' res.name %}" class="btn btn-info">No</a>
-                        {% elif 'cash' in request.path %}
-                            <a href="{% url 'resources:cash-list' res.currency %}" class="btn btn-info">No</a>
+                        {% elif 'currency' in request.path %}
+                            <a href="{% url 'resources:currency-list' res.bought_currency.currency %}" class="btn btn-info">No</a>
                         {% endif %}
                         </form>
                 </div>

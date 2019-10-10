@@ -51,12 +51,17 @@ class MarketPrices(SingletonModel):
 # data model common for all resources
 class Resource(models.Model):
     """
-    Common data for resource
+    Common data for resource to buy
     """
+    CURRENCY_CHOICES = [('USD', 'USD $'), ('EUR', 'EUR €'), ('PLN', 'PLN ZŁ'), ('CHF', 'CHF +')]
     owner = models.ForeignKey(InvestorUser, on_delete=models.CASCADE, default=1)
-    bought_price = MoneyField(max_digits=10, decimal_places=2, null=True, blank=True, default_currency='PLN')
+    bought_price = MoneyField(max_digits=10,
+                              decimal_places=2,
+                              null=True,
+                              blank=True,
+                              currency_choices=CURRENCY_CHOICES,
+                              default_currency=('PLN', 'PLN ZŁ'))
     date_of_bought = models.DateTimeField(auto_now_add=False)
-    amount = models.DecimalField(max_digits=10, decimal_places=0, default=0)
 
     class Meta:
         abstract = True
@@ -100,31 +105,43 @@ class Metal(Resource):
                             choices=UNIT_CHOICES,
                             default='oz')
 
+    amount = models.DecimalField(max_digits=10, decimal_places=0, default=0)
     description = models.TextField(blank=True, help_text='Type some information about this transaction (optional)')
 
     def __str__(self):
         return self.get_name_display()
 
 
-class Cash(Resource):
-    CURRENCY_CHOICES = [('USD', 'USD $'), ('EUR', 'EUR €'), ('PLN', 'PLN ZŁ'), ('CHF', 'CHF')]
-    currency = models.CharField(
-        max_length=10,
-        choices=CURRENCY_CHOICES,
-        default='CHF',
-    )
+class Currency(Resource):
+    bought_currency = MoneyField(max_digits=10,
+                                 decimal_places=2,
+                                 null=True,
+                                 blank=True,
+                                 currency_choices=Resource.CURRENCY_CHOICES,
+                                 default_currency=('CHF', 'CHF +'))
 
     @classmethod
-    def get_cash_list(cls, owner, currency):
-        return cls.objects.filter(owner=owner, currency=currency)
+    def get_currency_list(cls, owner, currency):
+        return cls.objects.filter(owner=owner, bought_currency_currency__icontains=currency)
 
     @classmethod
-    def get_total_cash(cls, owner=None, currency='PLN'):
-        total_cash = cls.objects.filter(owner=owner, currency=currency).aggregate(amount=Sum('amount'))
-        return total_cash['amount']
+    def get_total_currency(cls, owner=None, currency='CHF'):
+        total_currency = cls.objects.filter(owner=owner,
+                                            bought_currency_currency__icontains=currency)\
+                                            .aggregate(bought_currency=Sum('bought_currency'))
+        return total_currency['bought_currency']
 
     def __str__(self):
-        return self.currency
+        return 'Currency'
+
+
+# class Cash(models.Model):
+#     my_cash = MoneyField(max_digits=10,
+#                          decimal_places=2,
+#                          null=True, blank=True,
+#                          currency_choices=Resource.CURRENCY_CHOICES,
+#                          default_currency=('PLN', 'PLN ZŁ'))
+
 
 # class Land(Resource):
 #     LAND_CHOICES = [

@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 
-from .models import Metal, Cash
-from .forms import NewMetalForm, EditMetalForm, NewCashForm
+from .models import Metal, Currency
+from .forms import NewMetalForm, EditMetalForm, NewCurrencyForm
 
 
 @login_required
@@ -12,9 +12,9 @@ def metal_list(request, slug):
 
 
 @login_required
-def cash_list(request, slug):
-    cash = Cash.objects.get_cash_list(owner=request.user, currency=slug.upper())
-    return render(request, 'resources/cash_list.html', {'cash_list': cash})
+def currency_list(request, slug):
+    currency = Currency.get_currency_list(owner=request.user, currency=slug.upper())
+    return render(request, 'resources/currency_list.html', {'currency_list': currency})
 
 
 @login_required
@@ -24,9 +24,9 @@ def metal_detail(request, pk):
 
 
 @login_required
-def cash_detail(request, pk):
-    cash = get_object_or_404(Cash, pk=pk)
-    return render(request, 'resources/cash_detail.html', {'cash': cash})
+def currency_detail(request, pk):
+    currency = get_object_or_404(Currency, pk=pk)
+    return render(request, 'resources/currency_detail.html', {'currency': currency})
 
 
 @login_required
@@ -48,20 +48,20 @@ def new_metal(request):
 
 
 @login_required
-def new_cash(request):
+def new_currency(request):
     if request.method == 'POST':
-        form = NewCashForm(request.POST)
+        form = NewCurrencyForm(request.POST)
         if form.is_valid():
-            cash = form.save(commit=False)
-            cash.owner = request.user
-            cash.save()
-        return redirect('resources:cash-list', form.cleaned_data.get('currency'))
+            currency = form.save(commit=False)
+            currency.owner = request.user
+            currency.save()
+        return redirect('resources:currency-list', form.cleaned_data.get('bought_currency').currency)
     else:
-        form = NewCashForm()
+        form = NewCurrencyForm(my_currency=(request.user.my_currency, request.user.get_my_currency_display()))
     context = {
         'form': form,
     }
-    return render(request, 'resources/new_cash.html', context)
+    return render(request, 'resources/new_currency.html', context)
 
 
 @login_required
@@ -77,11 +77,12 @@ def delete_metal(request, pk):
 
 
 @login_required
-def delete_cash(request, pk):
-    res = get_object_or_404(Cash, pk=pk)
+def delete_currency(request, pk):
+    res = get_object_or_404(Currency, pk=pk)
+    print('currency delete')
     if request.method == 'POST':
         res.delete()
-        return redirect('resources:cash-list', res.currency.lower())
+        return redirect('resources:currency-list', res.bought_currency.currency)
 
     context = {'res': res}
 
@@ -121,30 +122,29 @@ def edit_metal(request, pk):
 
 
 @login_required
-def edit_cash(request, pk):
-    cash = get_object_or_404(Cash, pk=pk)
+def edit_currency(request, pk):
+    currency = get_object_or_404(Currency, pk=pk)
 
-    if cash:
+    if currency:
         initial_data = {
-            'bought_price': cash.bought_price,
-            'date_of_bought': cash.date_of_bought,
-            'amount': cash.amount,
-            'currency': cash.currency,
+            'bought_price': currency.bought_price,
+            'date_of_bought': currency.date_of_bought,
+            'bought_currency': currency.bought_currency,
         }
     else:
         initial_data = {}
 
     if request.method == 'POST':
-        form = NewCashForm(request.POST)
+        form = NewCurrencyForm(request.POST)
 
         if form.is_valid():
-            cash.bought_price = form.cleaned_data.get('bought_price')
-            cash.date_of_bought = form.cleaned_data.get('date_of_bought')
-            cash.amount = form.cleaned_data.get('amount')
-            cash.currency = form.cleaned_data.get('currency')
+            currency.bought_price = form.cleaned_data.get('bought_price')
+            currency.date_of_bought = form.cleaned_data.get('date_of_bought')
+            currency.currency = form.cleaned_data.get('bought_currency')
 
-            cash.save()
+            currency.save()
 
-        return redirect('resources:cash-list', form.cleaned_data.get('currency'))
-    form = NewCashForm(initial=initial_data)
-    return render(request, 'resources/edit_resource.html', {'form': form, 'cash': cash})
+        return redirect('resources:currency-list', form.cleaned_data.get('bought_currency').currency)
+    form = NewCurrencyForm(initial=initial_data,
+                           my_currency=(request.user.my_currency, request.user.get_my_currency_display()))
+    return render(request, 'resources/edit_resource.html', {'form': form, 'currency': currency})
