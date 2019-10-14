@@ -1,8 +1,12 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 
-from .models import Metal, Currency
-from .forms import NewMetalForm, EditMetalForm, NewCurrencyForm
+from .models import Metal, Currency, Cash
+from .forms import (NewMetalForm,
+                    EditMetalForm,
+                    NewCurrencyForm,
+                    NewCashForm,
+                    )
 
 
 @login_required
@@ -18,6 +22,12 @@ def currency_list(request, slug):
 
 
 @login_required
+def cash_list(request):
+    cash = Cash.get_cash_list(owner=request.user)
+    return render(request, 'resources/cash_list.html', {'cash_list': cash})
+
+
+@login_required
 def metal_detail(request, pk):
     metal = get_object_or_404(Metal, pk=pk)
     return render(request, 'resources/metal_detail.html', {'metal': metal})
@@ -27,6 +37,13 @@ def metal_detail(request, pk):
 def currency_detail(request, pk):
     currency = get_object_or_404(Currency, pk=pk)
     return render(request, 'resources/currency_detail.html', {'currency': currency})
+
+
+@login_required
+def cash_detail(request, pk):
+    print("pk {}".format(pk))
+    cash = get_object_or_404(Cash, pk=pk)
+    return render(request, 'resources/cash_detail.html', {'cash': cash})
 
 
 @login_required
@@ -148,3 +165,61 @@ def edit_currency(request, pk):
     form = NewCurrencyForm(initial=initial_data,
                            my_currency=(request.user.my_currency, request.user.get_my_currency_display()))
     return render(request, 'resources/edit_resource.html', {'form': form, 'currency': currency})
+
+
+@login_required
+def new_cash(request):
+    if request.method == 'POST':
+        form = NewCashForm(request.POST)
+        if form.is_valid():
+            cash = form.save(commit=False)
+            cash.owner = request.user
+            cash.save()
+        return redirect('resources:cash-list')
+    else:
+        form = NewCashForm(my_currency=(request.user.my_currency, request.user.get_my_currency_display()))
+    context = {
+        'form': form,
+    }
+    return render(request, 'resources/new_cash.html', context)
+
+
+@login_required
+def delete_cash(request, pk):
+    res = get_object_or_404(Cash, pk=pk)
+
+    if request.method == 'POST':
+        res.delete()
+        return redirect('resources:cash-list')
+
+    context = {'res': res}
+
+    return render(request, 'resources/confirm_delete.html', context)
+
+
+@login_required
+def edit_cash(request, pk):
+    cash = get_object_or_404(Cash, pk=pk)
+
+    if cash:
+        initial_data = {
+            'save_date': cash.save_date,
+            'my_cash': cash.my_cash,
+        }
+    else:
+        initial_data = {}
+
+    if request.method == 'POST':
+        form = NewCashForm(request.POST)
+
+        if form.is_valid():
+            cash.save_date = form.cleaned_data.get('save_date')
+            cash.my_cash = form.cleaned_data.get('my_cash')
+
+            cash.save()
+
+        return redirect('resources:cash-list')
+    form = NewCashForm(initial=initial_data,
+                       my_currency=(request.user.my_currency, request.user.get_my_currency_display()))
+
+    return render(request, 'resources/edit_resource.html', {'form': form})

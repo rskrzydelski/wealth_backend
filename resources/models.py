@@ -135,13 +135,21 @@ class Currency(Resource):
         return 'Currency'
 
 
-# class Cash(models.Model):
-#     my_cash = MoneyField(max_digits=10,
-#                          decimal_places=2,
-#                          null=True, blank=True,
-#                          currency_choices=Resource.CURRENCY_CHOICES,
-#                          default_currency=('PLN', 'PLN ZŁ'))
+class Cash(models.Model):
+    owner = models.ForeignKey(InvestorUser, on_delete=models.CASCADE, default=1)
+    save_date = models.DateTimeField(auto_now_add=False)
+    my_cash = MoneyField(max_digits=10,
+                         decimal_places=2,
+                         null=True, blank=True,
+                         currency_choices=Resource.CURRENCY_CHOICES,
+                         default_currency=('PLN', 'PLN ZŁ'))
 
+    @classmethod
+    def get_cash_list(cls, owner):
+        return cls.objects.filter(owner=owner)
+
+    def __str__(self):
+        return '{} cash {}'.format(self.owner.username, self.my_cash)
 
 # class Land(Resource):
 #     LAND_CHOICES = [
