@@ -17,13 +17,13 @@ def metal_list(request, slug):
 
 @login_required
 def currency_list(request, slug):
-    currency = Currency.get_currency_list(owner=request.user, currency=slug.upper())
+    currency = Currency.objects.get_currency_list(owner=request.user, currency=slug.upper())
     return render(request, 'resources/currency_list.html', {'currency_list': currency})
 
 
 @login_required
 def cash_list(request):
-    cash = Cash.get_cash_list(owner=request.user)
+    cash = Cash.objects.get_cash_list(owner=request.user)
     return render(request, 'resources/cash_list.html', {'cash_list': cash})
 
 

@@ -112,7 +112,19 @@ class Metal(Resource):
         return self.get_name_display()
 
 
+class CurrencyManager(models.Manager):
+    def get_currency_list(self, owner=None, currency='CHF'):
+        return super(CurrencyManager, self).filter(owner=owner, bought_currency_currency__icontains=currency)
+
+    def get_total_currency(self, owner=None, currency='CHF'):
+        total_currency = super(CurrencyManager, self).filter(owner=owner, bought_currency_currency__icontains=currency)\
+                                                                       .aggregate(bought_currency=Sum('bought_currency'))
+        return total_currency['bought_currency'] or 0
+
+
 class Currency(Resource):
+    objects = CurrencyManager()
+
     bought_currency = MoneyField(max_digits=10,
                                  decimal_places=2,
                                  null=True,
@@ -120,22 +132,22 @@ class Currency(Resource):
                                  currency_choices=Resource.CURRENCY_CHOICES,
                                  default_currency=('CHF', 'CHF +'))
 
-    @classmethod
-    def get_currency_list(cls, owner, currency):
-        return cls.objects.filter(owner=owner, bought_currency_currency__icontains=currency)
-
-    @classmethod
-    def get_total_currency(cls, owner=None, currency='CHF'):
-        total_currency = cls.objects.filter(owner=owner,
-                                            bought_currency_currency__icontains=currency)\
-                                            .aggregate(bought_currency=Sum('bought_currency'))
-        return total_currency['bought_currency']
-
     def __str__(self):
         return 'Currency'
 
 
+class CashManager(models.Manager):
+    def get_cash_list(self, owner=None):
+        return super(CashManager, self).filter(owner=owner)
+
+    def get_total_cash(self, owner=None):
+        total_cash = super(CashManager, self).filter(owner=owner).aggregate(my_cash=Sum('my_cash'))
+        return total_cash['my_cash'] or 0
+
+
 class Cash(models.Model):
+    objects = CashManager()
+
     owner = models.ForeignKey(InvestorUser, on_delete=models.CASCADE, default=1)
     save_date = models.DateTimeField(auto_now_add=False)
     my_cash = MoneyField(max_digits=10,
@@ -143,10 +155,6 @@ class Cash(models.Model):
                          null=True, blank=True,
                          currency_choices=Resource.CURRENCY_CHOICES,
                          default_currency=('PLN', 'PLN ZŁ'))
-
-    @classmethod
-    def get_cash_list(cls, owner):
-        return cls.objects.filter(owner=owner)
 
     def __str__(self):
         return '{} cash {}'.format(self.owner.username, self.my_cash)
