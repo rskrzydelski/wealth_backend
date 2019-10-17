@@ -10,10 +10,16 @@ def home_view(request):
     my_currency = request.user.my_currency
     total_silver = Metal.objects.get_total_silver(owner=request.user, unit='oz')
     total_gold = Metal.objects.get_total_gold(owner=request.user, unit='oz')
-    total_pln = Currency.objects.get_total_currency(owner=request.user, currency='PLN') or 0
-    total_usd = Currency.objects.get_total_currency(owner=request.user, currency='USD') or 0
-    total_eur = Currency.objects.get_total_currency(owner=request.user, currency='EUR') or 0
-    total_chf = Currency.objects.get_total_currency(owner=request.user, currency='CHF') or 0
+
+    total_pln = Currency.objects.get_total_currency(owner=request.user,
+                                                    currency='PLN') if my_currency != 'PLN' else None
+    total_usd = Currency.objects.get_total_currency(owner=request.user,
+                                                    currency='USD') if my_currency != 'USD' else None
+    total_eur = Currency.objects.get_total_currency(owner=request.user,
+                                                    currency='EUR') if my_currency != 'EUR' else None
+    total_chf = Currency.objects.get_total_currency(owner=request.user,
+                                                    currency='CHF') if my_currency != 'CHF' else None
+
     total_cash = Cash.objects.get_total_cash(owner=request.user) or 0
 
     context = {

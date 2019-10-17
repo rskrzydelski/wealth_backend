@@ -48,6 +48,7 @@
 Currences
 <br>
 <div class="row">
+    {% if total_dollar != None %}
     <div class="col-sm-6">
         <div class="card text-white bg-success mb-3">
             <div class="card-body">
@@ -59,6 +60,8 @@ Currences
             </div>
         </div>
     </div>
+    {% endif %}
+    {% if total_euro != None %}
     <div class="col-sm-6">
         <div class="card text-white bg-info mb-3">
             <div class="card-body">
@@ -72,6 +75,8 @@ Currences
     </div>
 </div>
 <div class="row">
+    {% endif %}
+    {% if total_franc != None %}
     <div class="col-sm-6">
         <div class="card text-white bg-danger mb-3">
             <div class="card-body">
@@ -83,12 +88,26 @@ Currences
             </div>
         </div>
     </div>
+    {% endif %}
+    {% if total_zloty != None %}
     <div class="col-sm-6">
         <div class="card text-white bg-primary mb-3">
             <div class="card-body">
                 <h5 class="card-title">Zloty</h5>
                 <h6 class="card-text">
                     Amount: {{ total_zloty }} PLN<br>
+                </h6>
+                <img src="{% static 'img/cash_ico.png' %}" alt="cash" height="92" width="102">
+            </div>
+        </div>
+    </div>
+    {% endif %}
+        <div class="col-sm-6">
+        <div class="card text-white bg-primary mb-3">
+            <div class="card-body">
+                <h5 class="card-title">My cash</h5>
+                <h6 class="card-text">
+                    Amount: {{ total_cash }} {{ my_currency }}<br>
                 </h6>
                 <img src="{% static 'img/cash_ico.png' %}" alt="cash" height="92" width="102">
             </div>
