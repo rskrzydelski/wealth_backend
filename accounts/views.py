@@ -31,8 +31,13 @@ def register_user(request):
     if request.method == 'POST':
         form = RegisterForm(request.POST)
         if form.is_valid():
-            form.save(commit=True)
-            return redirect('accounts:login')
+            user = form.save(commit=False)
+            password = form.cleaned_data.get('password')
+            user.set_password(password)
+            user.save()
+            new_user = authenticate(username=user.username, password=password)
+            login(request, new_user)
+            return redirect('home')
     else:
         form = RegisterForm()
     return render(request, 'accounts/register.html', {'form': form})
