@@ -68,8 +68,12 @@ class Resource(models.Model):
 
 
 class MetalManager(models.Manager):
-    def get_metal_list(self, owner=None, name='Ag'):
-        return super(MetalManager, self).filter(owner=owner, name=name)
+    def get_metal_list(self, owner=None, name=None):
+        if name:
+            qs = super(MetalManager, self).filter(owner=owner, name=name)
+        else:
+            qs = super(MetalManager, self).filter(owner=owner)
+        return qs
 
     def get_total_gold(self, owner=None, unit='oz'):
         total = super(MetalManager, self).filter(owner=owner, name='Au', unit=unit).aggregate(amount=Sum('amount'))

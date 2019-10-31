@@ -4,7 +4,7 @@ from django.urls import reverse, resolve
 from django.test import RequestFactory
 from mixer.backend.django import mixer
 from django.contrib.auth.models import User, AnonymousUser
-from ..views import home_view
+from wealth.wealth.views import home_view
 
 
 @pytest.fixture

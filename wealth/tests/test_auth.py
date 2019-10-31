@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.urls import reverse
 from django.test import RequestFactory, Client
 
-from ..views import signup
+from wealth.wealth.views import signup
 
 
 @pytest.fixture
