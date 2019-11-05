@@ -92,8 +92,8 @@ class Metal(Resource):
     objects = MetalManager()
 
     METAL_CHOICES = [
-        ('Ag', 'Silver'),
-        ('Au', 'Gold'),
+        ('silver', 'Silver'),
+        ('gold', 'Gold'),
     ]
     UNIT_CHOICES = [
         ('oz', 'ounce'),
