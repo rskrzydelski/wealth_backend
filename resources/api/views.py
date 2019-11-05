@@ -1,6 +1,6 @@
-from rest_framework.generics import ListCreateAPIView
+from rest_framework.generics import ListCreateAPIView, RetrieveAPIView
 
-from .serializers import MetalListSerializer, MetalCreateSerializer
+from .serializers import MetalListSerializer, MetalCreateSerializer, MetalDetailSerializer
 from resources.models import Metal
 
 
@@ -14,4 +14,12 @@ class MetalLstCreateAPIView(ListCreateAPIView):
     def get_queryset(self):
         query_name = self.request.GET.get('name')
         queryset = Metal.objects.get_metal_list(owner=self.request.user, name=query_name)
+        return queryset
+
+
+class MetalDetailAPIView(RetrieveAPIView):
+    serializer_class = MetalDetailSerializer
+
+    def get_queryset(self):
+        queryset = Metal.objects.filter(owner=self.request.user)
         return queryset

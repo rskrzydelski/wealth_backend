@@ -60,7 +60,7 @@ class Resource(models.Model):
                               null=True,
                               blank=True,
                               currency_choices=CURRENCY_CHOICES,
-                              default_currency=('PLN', 'PLN ZŁ'))
+                              default_currency='PLN')
     date_of_bought = models.DateTimeField(auto_now_add=False)
 
     class Meta:
