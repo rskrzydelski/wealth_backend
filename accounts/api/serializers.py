@@ -86,3 +86,13 @@ class UserCreateSerializer(ModelSerializer):
         user_obj.set_password(password)
         user_obj.save()
         return validated_data
+
+
+class UserDetailSerializer(ModelSerializer):
+    class Meta:
+        model = InvestorUser
+        fields = [
+            'username',
+            'email',
+            'my_currency',
+        ]

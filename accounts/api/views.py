@@ -1,10 +1,10 @@
-from rest_framework.generics import CreateAPIView
+from rest_framework.generics import CreateAPIView, RetrieveAPIView
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
 
-from .serializers import UserLoginSerializer, UserCreateSerializer
+from .serializers import UserLoginSerializer, UserCreateSerializer, UserDetailSerializer
 
 from accounts.models import InvestorUser
 
@@ -27,3 +27,8 @@ class UserCreateAPIView(CreateAPIView):
     queryset = InvestorUser.objects.all()
     serializer_class = UserCreateSerializer
     permission_classes = [AllowAny]
+
+
+class UserDetailAPIView(RetrieveAPIView):
+    serializer_class = UserDetailSerializer
+    queryset = InvestorUser.objects.all()
