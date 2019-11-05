@@ -13,3 +13,16 @@ class MetalListSerializer(ModelSerializer):
             'unit',
             'date_of_bought'
         ]
+
+
+class MetalCreateSerializer(ModelSerializer):
+    class Meta:
+        model = Metal
+        fields = [
+            'name',
+            'bought_price',
+            'amount',
+            'unit',
+            'date_of_bought',
+            'description',
+        ]
