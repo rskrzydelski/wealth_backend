@@ -44,3 +44,45 @@ class UserLoginSerializer(ModelSerializer):
                 raise ValidationError('Incorrect password !')
 
         return data
+
+
+class UserCreateSerializer(ModelSerializer):
+    email2 = EmailField(label='Confirm email')
+    email = EmailField(label='Email address')
+
+    class Meta:
+        model = InvestorUser
+        fields = [
+            'username',
+            'password',
+            'email',
+            'email2',
+            'my_currency',
+        ]
+        extra_kwargs = {'password': {'write_only': True}}
+
+    def validate(self, data):
+        email = data.get('email')
+        user_qs = InvestorUser.objects.filter(email=email)
+        if user_qs.exists():
+            raise ValidationError('This user has already registered.')
+        return data
+
+    def validate_email2(self, value):
+        data = self.get_initial()
+        email1 = data.get('email')
+        email2 = value
+
+        if email1 != email2:
+            raise ValidationError('Emails must much !')
+        return value
+
+    def create(self, validated_data):
+        username = validated_data.get('username')
+        email = validated_data.get('email')
+        my_currency = validated_data.get('my_currency')
+        password = validated_data.get('password')
+        user_obj = InvestorUser(username=username, email=email, my_currency=my_currency)
+        user_obj.set_password(password)
+        user_obj.save()
+        return validated_data
