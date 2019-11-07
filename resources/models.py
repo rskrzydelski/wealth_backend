@@ -75,13 +75,13 @@ class MetalManager(models.Manager):
             qs = super(MetalManager, self).filter(owner=owner)
         return qs
 
-    def get_total_gold(self, owner=None, unit='oz'):
-        total = super(MetalManager, self).filter(owner=owner, name='Au', unit=unit).aggregate(amount=Sum('amount'))
-        return total['amount'] or 0
+    def get_total_metal_amount(self, owner=None, name='gold', unit='oz'):
+        total_amount = super(MetalManager, self).filter(owner=owner, name=name, unit=unit).aggregate(total_amount=Sum('amount'))
+        return total_amount['total_amount'] or 0
 
-    def get_total_silver(self, owner=None, unit='oz'):
-        total = super(MetalManager, self).filter(owner=owner, name='Ag', unit=unit).aggregate(amount=Sum('amount'))
-        return total['amount'] or 0
+    def get_total_metal_cash_spend(self, owner=None, name='gold', unit='oz'):
+        total_spend = super(MetalManager, self).filter(owner=owner, name=name, unit=unit).aggregate(total_cash_spend=Sum('bought_price'))
+        return total_spend['total_cash_spend'] or 0
 
 
 # data model common for all metals
