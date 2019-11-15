@@ -57,8 +57,6 @@ class Resource(models.Model):
     owner = models.ForeignKey(InvestorUser, on_delete=models.CASCADE, default=1)
     bought_price = MoneyField(max_digits=10,
                               decimal_places=2,
-                              null=True,
-                              blank=True,
                               currency_choices=CURRENCY_CHOICES,
                               default_currency='PLN')
     date_of_bought = models.DateTimeField(auto_now_add=False)
@@ -118,7 +116,11 @@ class Metal(Resource):
 
 class CurrencyManager(models.Manager):
     def get_currency_list(self, owner=None, currency='CHF'):
-        return super(CurrencyManager, self).filter(owner=owner, bought_currency_currency__icontains=currency)
+        if currency:
+            qs = super(CurrencyManager, self).filter(owner=owner, bought_currency_currency__icontains=currency)
+        else:
+            qs = super(CurrencyManager, self).filter(owner=owner)
+        return qs
 
     def get_total_currency(self, owner=None, currency='CHF'):
         total_currency = super(CurrencyManager, self).filter(owner=owner, bought_currency_currency__icontains=currency)\

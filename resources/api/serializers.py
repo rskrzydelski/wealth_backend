@@ -1,6 +1,6 @@
 from rest_framework.serializers import ModelSerializer, SerializerMethodField
 
-from resources.models import Metal
+from resources.models import Metal, Currency
 
 
 class DynamicFieldsModelSerializer(ModelSerializer):
@@ -77,3 +77,25 @@ class MetalDetailSerializer(ModelSerializer):
 
     def get_bought_price(self, obj):
         return str(obj.bought_price)
+
+
+class CurrencyListSerializer(DynamicFieldsModelSerializer):
+    currency = SerializerMethodField('get_currency')
+    total_currency = SerializerMethodField('get_total_currency')
+
+    class Meta:
+        model = Currency
+        fields = [
+            'owner',
+            'currency',
+            'bought_currency',
+            'bought_price',
+            'total_currency',
+            'date_of_bought',
+        ]
+
+    def get_currency(self, obj):
+        return str(obj.bought_currency_currency)
+
+    def get_total_currency(self, obj):
+        return str(Currency.objects.get_total_currency(owner=obj.owner, currency=obj.bought_currency_currency))
