@@ -136,7 +136,7 @@ class Currency(Resource):
                                  null=True,
                                  blank=True,
                                  currency_choices=Resource.CURRENCY_CHOICES,
-                                 default_currency=('CHF', 'CHF +'))
+                                 default_currency='CHF')
 
     def __str__(self):
         return 'Currency'

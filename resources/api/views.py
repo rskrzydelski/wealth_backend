@@ -1,7 +1,14 @@
 from rest_framework.generics import ListCreateAPIView, RetrieveAPIView
 from rest_framework.response import Response
 
-from .serializers import MetalListSerializer, MetalCreateSerializer, MetalDetailSerializer, CurrencyListSerializer
+
+from .serializers import (
+    MetalListSerializer,
+    MetalCreateSerializer,
+    MetalDetailSerializer,
+    CurrencyListSerializer,
+    CurrencyCreateSerializer,
+)
 from resources.models import Metal, Currency
 
 
@@ -58,7 +65,7 @@ class CurrencyLstCreateAPIView(ListCreateAPIView):
         if self.request.method == 'GET':
             return CurrencyListSerializer
         else:
-            return CurrencyListSerializer
+            return CurrencyCreateSerializer
 
     def get_queryset(self):
         query_name = self.request.GET.get('name')
@@ -88,3 +95,6 @@ class CurrencyLstCreateAPIView(ListCreateAPIView):
         else:
             serializer = self.get_serializer_class()(queryset, many=True)
         return Response(serializer.data)
+
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)

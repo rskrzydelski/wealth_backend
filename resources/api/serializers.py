@@ -99,3 +99,31 @@ class CurrencyListSerializer(DynamicFieldsModelSerializer):
 
     def get_total_currency(self, obj):
         return str(Currency.objects.get_total_currency(owner=obj.owner, currency=obj.bought_currency_currency))
+
+
+class CurrencyCreateSerializer(ModelSerializer):
+    class Meta:
+        model = Currency
+        fields = [
+            'bought_currency',
+            'bought_currency_currency',
+            'bought_price',
+            'bought_price_currency',
+            'date_of_bought',
+        ]
+
+
+class CurrencyDetailSerializer(ModelSerializer):
+    currency = SerializerMethodField('get_currency')
+
+    class Meta:
+        model = Currency
+        fields = [
+            'currency',
+            'bought_currency',
+            'bought_price',
+            'date_of_bought',
+        ]
+
+    def get_currency(self, obj):
+        return str(obj.bought_currency_currency)
