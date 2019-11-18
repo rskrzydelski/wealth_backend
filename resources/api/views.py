@@ -8,6 +8,7 @@ from .serializers import (
     MetalDetailSerializer,
     CurrencyListSerializer,
     CurrencyCreateSerializer,
+    CurrencyDetailSerializer,
 )
 from resources.models import Metal, Currency
 
@@ -98,3 +99,12 @@ class CurrencyLstCreateAPIView(ListCreateAPIView):
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
+
+
+class CurrencyDetailAPIView(RetrieveAPIView):
+    serializer_class = CurrencyDetailSerializer
+
+    def get_queryset(self):
+        queryset = Currency.objects.filter(owner=self.request.user)
+        return queryset
+
