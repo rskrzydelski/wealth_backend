@@ -9,8 +9,9 @@ from .serializers import (
     CurrencyListSerializer,
     CurrencyCreateSerializer,
     CurrencyDetailSerializer,
+    CashListSerializer,
 )
-from resources.models import Metal, Currency
+from resources.models import Metal, Currency, Cash
 
 
 class MetalLstCreateAPIView(ListCreateAPIView):
@@ -107,4 +108,38 @@ class CurrencyDetailAPIView(RetrieveAPIView):
     def get_queryset(self):
         queryset = Currency.objects.filter(owner=self.request.user)
         return queryset
+
+
+class CashLstCreateAPIView(ListCreateAPIView):
+    def get_serializer_class(self):
+        if self.request.method == 'GET':
+            return CashListSerializer
+        else:
+            return CashListSerializer
+
+    def get_queryset(self):
+        query_sum = self.request.GET.get('sum')
+
+        if query_sum:
+            # make fake queryset with only one model with sum up data
+            original_qs = Cash.objects.get_cash_list(owner=self.request.user)
+            queryset = list()
+            queryset.append(original_qs.first())
+        else:
+            queryset = Cash.objects.get_cash_list(owner=self.request.user)
+        return queryset
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        if self.request.method == 'GET':
+            if self.request.GET.get('sum') == 'true':
+                serializer = self.get_serializer_class()(queryset, many=True, fields=('my_currency',
+                                                                                      'total_cash',))
+            else:
+                serializer = self.get_serializer_class()(queryset, many=True, fields=('my_currency',
+                                                                                      'save_date',
+                                                                                      'my_cash',))
+        else:
+            serializer = self.get_serializer_class()(queryset, many=True)
+        return Response(serializer.data)
 
