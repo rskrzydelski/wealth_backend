@@ -10,6 +10,7 @@ from .serializers import (
     CurrencyCreateSerializer,
     CurrencyDetailSerializer,
     CashListSerializer,
+    CashCreateSerializer,
 )
 from resources.models import Metal, Currency, Cash
 
@@ -115,7 +116,7 @@ class CashLstCreateAPIView(ListCreateAPIView):
         if self.request.method == 'GET':
             return CashListSerializer
         else:
-            return CashListSerializer
+            return CashCreateSerializer
 
     def get_queryset(self):
         query_sum = self.request.GET.get('sum')
@@ -142,4 +143,7 @@ class CashLstCreateAPIView(ListCreateAPIView):
         else:
             serializer = self.get_serializer_class()(queryset, many=True)
         return Response(serializer.data)
+
+    def perform_create(self, serializer):
+        serializer.save(my_cash_currency=self.request.user.my_currency)
 

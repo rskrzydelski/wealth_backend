@@ -147,3 +147,13 @@ class CashListSerializer(DynamicFieldsModelSerializer):
 
     def get_my_currency(self, obj):
         return str(obj.owner.my_currency)
+
+
+class CashCreateSerializer(ModelSerializer):
+    class Meta:
+        model = Cash
+        fields = [
+            'save_date',
+            'my_cash',
+        ]
+

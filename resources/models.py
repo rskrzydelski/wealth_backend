@@ -160,7 +160,7 @@ class Cash(models.Model):
                          decimal_places=2,
                          null=True, blank=True,
                          currency_choices=Resource.CURRENCY_CHOICES,
-                         default_currency=('PLN', 'PLN ZŁ'))
+                         default_currency='PLN')
 
     def __str__(self):
         return '{} cash {}'.format(self.owner.username, self.my_cash)
