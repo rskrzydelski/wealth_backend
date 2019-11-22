@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from ..aggregators import MetalWalletData
+from ..aggregators import MetalWalletData, CashWalletData
 
 
 class MetalWalletSerializer(serializers.Serializer):
@@ -21,3 +21,14 @@ class MetalWalletSerializer(serializers.Serializer):
         instance.profit = validated_data.get('profit', instance.profit)
         return instance
 
+
+class CashWalletSerializer(serializers.Serializer):
+    my_currency = serializers.CharField(max_length=4)
+    cash = serializers.DecimalField(max_digits=7, decimal_places=2)
+
+    def create(self, validated_data):
+        return CashWalletData(**validated_data)
+
+    def update(self, instance, validated_data):
+        instance.my_currency = validated_data.get('my_currency', instance.my_currency)
+        instance.cash = validated_data.get('cash', instance.cash)

@@ -2,8 +2,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import api_view
 
-from .serializers import MetalWalletSerializer
-from ..aggregators import Aggregator, MetalWalletData
+from .serializers import MetalWalletSerializer, CashWalletSerializer
+from ..aggregators import Aggregator, MetalWalletData, CashWalletData
 from resources.models import Metal
 
 
@@ -25,5 +25,15 @@ def metal_aggregator(request, slug=None):
                                total_cash_spend=total_cash_spend,
                                profit=total_cash - total_cash_spend,)
     serializer = MetalWalletSerializer(instance)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+def cash_aggregator(request):
+    aggregator = Aggregator(owner=request.user)
+    my_cash = aggregator.get_my_cash()
+    instance = CashWalletData(my_currency=request.user.my_currency,
+                                cash=my_cash)
+    serializer = CashWalletSerializer(instance)
     return Response(serializer.data)
 

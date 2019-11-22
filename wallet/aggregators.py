@@ -1,6 +1,6 @@
 from decimal import Decimal
 
-from resources.models import Metal
+from resources.models import Metal, Cash
 
 
 # mock values of metals - fetch from web will be implemented
@@ -18,6 +18,12 @@ class MetalWalletData(object):
         self.total_cash = total_cash
         self.total_cash_spend = total_cash_spend
         self.profit = profit
+
+
+class CashWalletData(object):
+    def __init__(self, my_currency=None, cash=None):
+        self.my_currency = my_currency
+        self.cash = cash
 
 
 # aggregation class
@@ -48,17 +54,18 @@ class Aggregator(object):
         spend_cash = 0
         if self._validate_metal_name(name=name):
             if name is None:
-                spend_cash = 0
                 for name in Metal.METAL_CHOICES:
                     try:
                         spend_cash += Metal.objects.get_total_metal_cash_spend(owner=self.owner, name=name[0])
                     except:
-                        spend_cash = 0
+                        continue
             else:
                 spend_cash = Metal.objects.get_total_metal_cash_spend(owner=self.owner, name=name)
-                if not spend_cash:
-                    spend_cash = 0
-        return Decimal(spend_cash)
+        return Decimal(spend_cash).__round__(2) or Decimal(0)
+
+    def get_my_cash(self):
+        total_cash = Cash.objects.get_total_cash(owner=self.owner)
+        return Decimal(total_cash).__round__(2) or Decimal(0)
 
     @staticmethod
     def _validate_metal_name(name=None):
