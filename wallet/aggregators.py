@@ -1,12 +1,18 @@
 from decimal import Decimal
 
-from resources.models import Metal, Cash
+from resources.models import Metal, Cash, Currency
 
 
 # mock values of metals - fetch from web will be implemented
 metal_prices = {
     'silver': 110,
     'gold': 6000,
+}
+
+currency_prices = {
+    'USD': Decimal(3.8),
+    'EUR': Decimal(4.2),
+    'CHF': Decimal(3.9),
 }
 
 
@@ -24,6 +30,12 @@ class CashWalletData(object):
     def __init__(self, my_currency=None, cash=None):
         self.my_currency = my_currency
         self.cash = cash
+
+
+class CurrencyWalletData(object):
+    def __init__(self, total_value=None, currency_name=None):
+        self.total_value = total_value
+        self.currency_name = currency_name
 
 
 # aggregation class
@@ -67,6 +79,23 @@ class Aggregator(object):
         total_cash = Cash.objects.get_total_cash(owner=self.owner)
         return Decimal(total_cash).__round__(2) or Decimal(0)
 
+    def get_currency_value(self, name=None):
+        total_value = 0
+        if self._validate_currency_name(name=name, my_currency=self.owner.my_currency):
+            if name is None:
+                for name in Currency.CURRENCY_CHOICES:
+                    if name[0] == self.owner.my_currency:
+                        continue
+                    try:
+                        total_value += currency_prices[name[0]] * Currency.objects.get_total_currency(owner=self.owner,
+                                                                                                      currency=name[0])
+                    except:
+                        continue
+            else:
+                total_value = currency_prices[str(name).upper()] * Currency.objects.get_total_currency(owner=self.owner,
+                                                                                                       currency=name)
+        return Decimal(total_value).__round__(2) or Decimal(0)
+
     @staticmethod
     def _validate_metal_name(name=None):
         ok = False
@@ -75,5 +104,15 @@ class Aggregator(object):
                 ok = True
         if name is None:
             ok = True
+        return ok
+
+    @staticmethod
+    def _validate_currency_name(name=None, my_currency=None):
+        ok = False
+        for item in Currency.CURRENCY_CHOICES:
+            if str(name).upper() in item and str(name).upper() != my_currency:
+                ok = True
+            if name is None:
+                ok = True
         return ok
 

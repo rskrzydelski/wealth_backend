@@ -2,8 +2,9 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import api_view
 
-from .serializers import MetalWalletSerializer, CashWalletSerializer
-from ..aggregators import Aggregator, MetalWalletData, CashWalletData
+
+from .serializers import MetalWalletSerializer, CashWalletSerializer, CurrencyWalletSerializer
+from ..aggregators import Aggregator, MetalWalletData, CashWalletData, CurrencyWalletData
 from resources.models import Metal
 
 
@@ -37,3 +38,19 @@ def cash_aggregator(request):
     serializer = CashWalletSerializer(instance)
     return Response(serializer.data)
 
+
+@api_view(['GET'])
+def currency_aggregator(request, slug=None):
+    aggregator = Aggregator(owner=request.user)
+    total_value = aggregator.get_currency_value(name=slug)
+
+    if total_value is None:
+        return Response(status.HTTP_404_NOT_FOUND)
+
+    if slug is None:
+        slug = 'All currences'
+
+    instance = CurrencyWalletData(currency_name=slug,
+                                  total_value=total_value)
+    serializer = CurrencyWalletSerializer(instance)
+    return Response(serializer.data)
