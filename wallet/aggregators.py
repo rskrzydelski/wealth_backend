@@ -38,6 +38,12 @@ class CurrencyWalletData(object):
         self.currency_name = currency_name
 
 
+class WalletData(object):
+    def __init__(self, title=None, my_fortune=None):
+        self.title = title
+        self.my_fortune=my_fortune
+
+
 # aggregation class
 class Aggregator(object):
     def __init__(self, owner=None):
