@@ -40,3 +40,64 @@ class MetalModelTestCase(TestCase):
         self.assertEqual(self.gold_test_obj_1.unit, self.gold_test_data_1.get('unit'))
         self.assertEqual(self.gold_test_obj_1.amount, self.gold_test_data_1.get('amount'))
         self.assertEqual(self.gold_test_obj_1.description, self.gold_test_data_1.get('description'))
+
+    def test_metal_manager_list_len(self):
+        qs = Metal.objects.get_metal_list(owner=self.investor_test)
+        self.assertEqual(qs.count(), 4)
+
+    def test_metal_manager_list_content(self):
+        qs = Metal.objects.get_metal_list(owner=self.investor_test)
+
+        self.assertTrue(qs.filter(name='silver').filter(amount=130).exists() is True)
+        self.assertTrue(qs.filter(name='silver').filter(amount=25).exists() is True)
+        self.assertTrue(qs.filter(name='gold').filter(amount=1).exists() is True)
+        self.assertTrue(qs.filter(name='gold').filter(amount=3).exists() is True)
+
+    def test_metal_manager_silver_list_len(self):
+        qs = Metal.objects.get_metal_list(owner=self.investor_test, name='silver')
+        self.assertEqual(qs.count(), 2)
+
+    def test_metal_manager_silver_content(self):
+        qs = Metal.objects.get_metal_list(owner=self.investor_test, name='silver')
+
+        self.assertTrue(qs.filter(name='silver').filter(amount=130).exists() is True)
+        self.assertTrue(qs.filter(name='silver').filter(amount=25).exists() is True)
+
+    def test_metal_manager_gold_list_len(self):
+        qs = Metal.objects.get_metal_list(owner=self.investor_test, name='gold')
+        self.assertEqual(qs.count(), 2)
+
+    def test_metal_manager_gold_content(self):
+        qs = Metal.objects.get_metal_list(owner=self.investor_test, name='gold')
+
+        self.assertTrue(qs.filter(name='gold').filter(amount=1).exists() is True)
+        self.assertTrue(qs.filter(name='gold').filter(amount=3).exists() is True)
+
+    def test_metal_manager_list_negative_name(self):
+        qs = Metal.objects.get_metal_list(owner=self.investor_test, name='abcd')
+        self.assertTrue(not qs)
+
+    def test_metal_manager_total_amount(self):
+        amount = Metal.objects.get_total_metal_amount(owner=self.investor_test, name=None)
+        self.assertEqual(amount, 159)
+
+    def test_metal_manager_total_silver_amount(self):
+        amount = Metal.objects.get_total_metal_amount(owner=self.investor_test, name='silver')
+        self.assertEqual(amount, 155)
+
+    def test_metal_manager_total_gold_amount(self):
+        amount = Metal.objects.get_total_metal_amount(owner=self.investor_test, name='gold')
+        self.assertEqual(amount, 4)
+
+    def test_metal_manager_total_amount_negative_name(self):
+        amount = Metal.objects.get_total_metal_amount(owner=self.investor_test, name='abcd')
+        self.assertEqual(amount, 0)
+
+    def test_metal_manager_silver_cash_spend(self):
+        cash = Metal.objects.get_total_metal_cash_spend(owner=self.investor_test, name='silver')
+        self.assertEqual(cash, 14400)
+
+    def test_metal_manager_gold_cash_spend(self):
+        cash = Metal.objects.get_total_metal_cash_spend(owner=self.investor_test, name='gold')
+        self.assertEqual(cash, 24100)
+
