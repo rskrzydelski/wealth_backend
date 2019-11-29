@@ -78,7 +78,7 @@ class MetalModelTestCase(TestCase):
         self.assertTrue(not qs)
 
     def test_metal_manager_total_amount(self):
-        amount = Metal.objects.get_total_metal_amount(owner=self.investor_test, name=None)
+        amount = Metal.objects.get_total_metal_amount(owner=self.investor_test)
         self.assertEqual(amount, 159)
 
     def test_metal_manager_total_silver_amount(self):

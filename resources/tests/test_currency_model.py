@@ -54,3 +54,71 @@ class CurrencyModelTestCase(TestCase):
         self.assertEqual(str(self.chf_test_obj_1.bought_currency.amount), self.chf_test_data_1.get('bought_currency'))
         self.assertEqual(self.chf_test_obj_1.bought_currency_currency, self.chf_test_data_1.get('bought_currency_currency'))
 
+    def test_currency_manager_list_len(self):
+        qs = Currency.objects.get_currency_list(owner=self.investor_test)
+        self.assertEqual(qs.count(), 6)
+
+    def test_currency_manager_list_content(self):
+        qs = Currency.objects.get_currency_list(owner=self.investor_test)
+
+        self.assertTrue(qs.filter(bought_currency_currency='USD').filter(bought_currency=560).exists() is True)
+        self.assertTrue(qs.filter(bought_currency_currency='USD').filter(bought_currency=2700).exists() is True)
+        self.assertTrue(qs.filter(bought_currency_currency='EUR').filter(bought_currency=1000).exists() is True)
+        self.assertTrue(qs.filter(bought_currency_currency='EUR').filter(bought_currency=250).exists() is True)
+        self.assertTrue(qs.filter(bought_currency_currency='CHF').filter(bought_currency=200).exists() is True)
+        self.assertTrue(qs.filter(bought_currency_currency='CHF').filter(bought_currency=700).exists() is True)
+
+    def test_currency_manager_usd_list_len(self):
+        qs = Currency.objects.get_currency_list(owner=self.investor_test, currency='USD')
+        self.assertEqual(qs.count(), 2)
+
+    def test_currency_manager_usd_content(self):
+        qs = Currency.objects.get_currency_list(owner=self.investor_test, currency='USD')
+
+        self.assertTrue(qs.filter(bought_currency_currency='USD').filter(bought_currency=560).exists() is True)
+        self.assertTrue(qs.filter(bought_currency_currency='USD').filter(bought_currency=2700).exists() is True)
+
+    def test_currency_manager_eur_list_len(self):
+        qs = Currency.objects.get_currency_list(owner=self.investor_test, currency='EUR')
+        self.assertEqual(qs.count(), 2)
+
+    def test_currency_manager_eur_content(self):
+        qs = Currency.objects.get_currency_list(owner=self.investor_test, currency='EUR')
+
+        self.assertTrue(qs.filter(bought_currency_currency='EUR').filter(bought_currency=1000).exists() is True)
+        self.assertTrue(qs.filter(bought_currency_currency='EUR').filter(bought_currency=250).exists() is True)
+
+    def test_currency_manager_chf_list_len(self):
+        qs = Currency.objects.get_currency_list(owner=self.investor_test, currency='CHF')
+        self.assertEqual(qs.count(), 2)
+
+    def test_currency_manager_chf_content(self):
+        qs = Currency.objects.get_currency_list(owner=self.investor_test, currency='CHF')
+
+        self.assertTrue(qs.filter(bought_currency_currency='CHF').filter(bought_currency=200).exists() is True)
+        self.assertTrue(qs.filter(bought_currency_currency='CHF').filter(bought_currency=700).exists() is True)
+
+    def test_currency_manager_list_negative_name(self):
+        qs = Currency.objects.get_currency_list(owner=self.investor_test, currency='abcd')
+        self.assertTrue(not qs)
+
+    def test_currency_manager_total(self):
+        total_currency = Currency.objects.get_total_currency(owner=self.investor_test, currency=None)
+        self.assertEqual(total_currency, None)
+
+    def test_currency_manager_total_usd(self):
+        currency = Currency.objects.get_total_currency(owner=self.investor_test, currency='USD')
+        self.assertEqual(currency, 3260)
+
+    def test_currency_manager_total_eur(self):
+        currency = Currency.objects.get_total_currency(owner=self.investor_test, currency='EUR')
+        self.assertEqual(currency, 1250)
+
+    def test_currency_manager_total_chf(self):
+        currency = Currency.objects.get_total_currency(owner=self.investor_test, currency='CHF')
+        self.assertEqual(currency, 900)
+
+    def test_currency_manager_total_negative_name(self):
+        currency = Currency.objects.get_total_currency(owner=self.investor_test, currency='abcd')
+        self.assertEqual(currency, 0)
+
