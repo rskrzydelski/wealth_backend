@@ -129,17 +129,19 @@ class Metal(Resource):
 
 
 class CurrencyManager(models.Manager):
-    def get_currency_list(self, owner=None, currency='CHF'):
+    def get_currency_list(self, owner=None, currency=None):
         if currency:
             qs = super(CurrencyManager, self).filter(owner=owner, bought_currency_currency__icontains=currency)
         else:
             qs = super(CurrencyManager, self).filter(owner=owner)
         return qs
 
-    def get_total_currency(self, owner=None, currency='CHF'):
+    def get_total_currency(self, owner=None, currency=None):
+        if currency is None:
+            return None
         total_currency = super(CurrencyManager, self).filter(owner=owner, bought_currency_currency__icontains=currency)\
-                                                                       .aggregate(bought_currency=Sum('bought_currency'))
-        return total_currency['bought_currency'] or 0
+                                                     .aggregate(bought_currency=Sum('bought_currency'))
+        return total_currency['bought_currency'] or Decimal(0)
 
 
 class Currency(Resource):
@@ -162,7 +164,7 @@ class CashManager(models.Manager):
 
     def get_total_cash(self, owner=None):
         total_cash = super(CashManager, self).filter(owner=owner).aggregate(my_cash=Sum('my_cash'))
-        return total_cash['my_cash'] or 0
+        return total_cash['my_cash'] or Decimal(0)
 
 
 class Cash(models.Model):
