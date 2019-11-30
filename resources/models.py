@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from django.db import models
 from django.db.models import Sum
 from accounts.models import InvestorUser
@@ -73,13 +75,25 @@ class MetalManager(models.Manager):
             qs = super(MetalManager, self).filter(owner=owner)
         return qs
 
-    def get_total_metal_amount(self, owner=None, name='gold', unit='oz'):
+    def get_total_metal_amount(self, owner=None, name=None, unit='oz'):
+        if name is None:
+            return None
         total_amount = super(MetalManager, self).filter(owner=owner, name=name, unit=unit).aggregate(total_amount=Sum('amount'))
         return total_amount['total_amount'] or 0
 
-    def get_total_metal_cash_spend(self, owner=None, name='gold', unit='oz'):
-        total_spend = super(MetalManager, self).filter(owner=owner, name=name, unit=unit).aggregate(total_cash_spend=Sum('bought_price'))
-        return total_spend['total_cash_spend'] or 0
+    def get_total_metal_cash_spend(self, owner=None, name=None, unit='oz'):
+        total_spend, total = 0, 0
+
+        if name is None:
+            return Decimal(0)
+        if name:
+            total_spend = super(MetalManager, self)\
+                         .filter(owner=owner, name=name, unit=unit)\
+                         .aggregate(total_cash_spend=Sum('bought_price'))
+            total = total_spend['total_cash_spend']
+        if not total:
+            total = Decimal(0)
+        return total
 
 
 # data model common for all metals
