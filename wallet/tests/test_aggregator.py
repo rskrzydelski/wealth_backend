@@ -76,3 +76,4 @@ class AggregatorTestCase(TestCase):
         self.assertEqual(self.a.get_currency_value(name='USD'), total_usd.__round__(2))
         self.assertEqual(self.a.get_currency_value(name='EUR'), total_eur.__round__(2))
         self.assertEqual(self.a.get_currency_value(name='CHF'), total_chf.__round__(2))
+
