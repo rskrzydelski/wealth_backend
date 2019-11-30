@@ -1,0 +1,8 @@
+curl -X POST -d "username=raf&password=raf" http://localhost:8000/api/v1/auth/token
+http POST http://localhost:8000/api/v1/auth/token username=raf password=raf
+
+curl -H "Authorization: JWT <your_token>" http://localhost:8000/api/v1/resources/metals
+curl -H "Authorization: JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJ1c2VybmFtZSI6InJhZiIsImV4cCI6MTU3NTEyNTI1OSwiZW1haWwiOiJyQGdtYWlsLmNvbSJ9.4vVSOFoXr9pZYRUFBUYSd1vfnxaC-de-cEQWsptC8Zw" http://localhost:8000/api/v1/resources/metals
+http GET http://localhost:8000/api/v1/resources/metals "Authorization: JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJ1c2VybmFtZSI6InJhZiIsImV4cCI6MTU3NTEyNTU3NywiZW1haWwiOiJyQGdtYWlsLmNvbSJ9.P9_gHJi8iKNEl0ev_KJoiRdgjUn_P91cwMyeXPRBjkU"
+http GET http://localhost:8000/api/v1/resources/metals?name=silver "Authorization: JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJ1c2VybmFtZSI6InJhZiIsImV4cCI6MTU3NTEyNTU3NywiZW1haWwiOiJyQGdtYWlsLmNvbSJ9.P9_gHJi8iKNEl0ev_KJoiRdgjUn_P91cwMyeXPRBjkU"
+http GET http://localhost:8000/api/v1/resources/metals?name=gold "Authorization: JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJ1c2VybmFtZSI6InJhZiIsImV4cCI6MTU3NTEyNTU3NywiZW1haWwiOiJyQGdtYWlsLmNvbSJ9.P9_gHJi8iKNEl0ev_KJoiRdgjUn_P91cwMyeXPRBjkU"
