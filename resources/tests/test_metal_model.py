@@ -7,7 +7,6 @@ from accounts.models import InvestorUser
 
 
 class MetalModelTestCase(TestCase):
-    @override_settings(USE_TZ=False)
     def setUp(self):
         with open("./resources/tests/cfg/test_metal_data.config", "r") as metal_cfg:
             test_data = metal_cfg.read()
