@@ -35,8 +35,20 @@ case $1 in
 		         get_token
                  http POST http://localhost:8000/api/v1/resources/metals "Authorization: JWT $TOKEN"
 		 ;;
+	 currency)
+                 get_token
+                 http GET http://localhost:8000/api/v1/resources/currency "Authorization: JWT $TOKEN"
+		 ;;
+	 usd)
+                 get_token
+                 http GET http://localhost:8000/api/v1/resources/currency?name=usd "Authorization: JWT $TOKEN"
+		 ;;
+	 create_usd)
+		         get_token
+                 http POST http://localhost:8000/api/v1/resources/currency bought_currency="500" bought_currency_currency="USD" bought_price="2000" bought_price_currency="PLN" date_of_bought="2019-12-26T12:01:36Z" "Authorization: JWT $TOKEN"
+		 ;;
      *)
-		 echo "Usage: test_client {metals|gold|silver|gold_sum|silver_sum}"
+		 echo "Usage: test_client {metals|gold|silver|gold_sum|silver_sum|currency|usd|create_usd}"
 		 ;;
  esac
 
