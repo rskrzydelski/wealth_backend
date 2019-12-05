@@ -53,7 +53,8 @@ class MarketPrices(SingletonModel):
 # data model common for all resources
 class Resource(models.Model):
     """
-    Common data for resource to buy
+    Resource:
+    Common data for metal and currency resource
     """
     CURRENCY_CHOICES = [('USD', 'USD $'), ('EUR', 'EUR €'), ('PLN', 'PLN ZŁ'), ('CHF', 'CHF +')]
     owner = models.ForeignKey(InvestorUser, on_delete=models.CASCADE, default=1)
@@ -69,6 +70,13 @@ class Resource(models.Model):
 
 class MetalManager(models.Manager):
     def get_metal_list(self, owner=None, name=None):
+        """
+        MetalManager:
+        get_metal_list - returns list of particular metal or all metals
+        :param name [silver, gold, none]
+        :param owner
+        :returns (Queryset) [silver list, gold list, all metals list]
+        """
         if name:
             qs = super(MetalManager, self).filter(owner=owner, name=name)
         else:
@@ -76,12 +84,28 @@ class MetalManager(models.Manager):
         return qs
 
     def get_total_metal_amount(self, owner=None, name=None, unit='oz'):
+        """
+        MetalManager:
+        get_total_metal_amount - returns total amount of particular metal
+        :param name [silver, gold, none]
+        :param owner
+        :param unit [oz]
+        :returns (Decimal) [silver amount, gold amount, None]
+        """
         if name is None:
             return None
         total_amount = super(MetalManager, self).filter(owner=owner, name=name, unit=unit).aggregate(total_amount=Sum('amount'))
         return total_amount['total_amount'] or 0
 
     def get_total_metal_cash_spend(self, owner=None, name=None, unit='oz'):
+        """
+        MetalManager:
+        get_total_metal_cash_spend - returns total cash spend of particular metal or all metals
+        :param name [silver, gold, none]
+        :param owner
+        :param unit [oz]
+        :returns (Decimal) [silver cash spend, gold cash spend, all metals cash spend]
+        """
         total_spend, total = 0, 0
 
         if name is None:
@@ -99,6 +123,7 @@ class MetalManager(models.Manager):
 # data model common for all metals
 class Metal(Resource):
     """
+    Metal:
     Precious metals data
     """
     objects = MetalManager()
@@ -130,6 +155,13 @@ class Metal(Resource):
 
 class CurrencyManager(models.Manager):
     def get_currency_list(self, owner=None, currency=None):
+        '''
+        CurrencyManager:
+        get_currency_list - returns list of particular currency or all currences
+        :param currency [USD, EUR, CHF, PLN]
+        :param owner
+        :returns (Queryset) [usd list, eur list, chf list, pln list, all currency list]
+        '''
         if currency:
             qs = super(CurrencyManager, self).filter(owner=owner, bought_currency_currency__icontains=currency)
         else:
@@ -137,6 +169,13 @@ class CurrencyManager(models.Manager):
         return qs
 
     def get_total_currency(self, owner=None, currency=None):
+        '''
+        CurrencyManager:
+        get_total_currency - returns total amount of particular currency
+        :param currency [USD, EUR, CHF, PLN]
+        :param owner
+        :returns (Decimal) [usd amount, eur amount, chf amount, pln amount, None]
+        '''
         if currency is None:
             return None
         total_currency = super(CurrencyManager, self).filter(owner=owner, bought_currency_currency__icontains=currency)\
@@ -145,6 +184,10 @@ class CurrencyManager(models.Manager):
 
 
 class Currency(Resource):
+    """
+    Currency:
+    Currency data
+    """
     objects = CurrencyManager()
 
     bought_currency = MoneyField(max_digits=10,
@@ -160,14 +203,30 @@ class Currency(Resource):
 
 class CashManager(models.Manager):
     def get_cash_list(self, owner=None):
+        '''
+        CashManager:
+        get_cash_list - returns list my cash
+        :param owner
+        :returns (Queryset) [cash list]
+        '''
         return super(CashManager, self).filter(owner=owner)
 
     def get_total_cash(self, owner=None):
+        '''
+        CashManager:
+        get_total_cash - returns total amount of my cash
+        :param owner
+        :returns (Decimal) [my cash amount]
+        '''
         total_cash = super(CashManager, self).filter(owner=owner).aggregate(my_cash=Sum('my_cash'))
         return total_cash['my_cash'] or Decimal(0)
 
 
 class Cash(models.Model):
+    """
+    Cash:
+    My cash
+    """
     objects = CashManager()
 
     owner = models.ForeignKey(InvestorUser, on_delete=models.CASCADE, default=1)
