@@ -1,3 +1,4 @@
+from rest_framework import serializers
 from rest_framework.serializers import ModelSerializer, SerializerMethodField
 
 from resources.models import Metal, Currency, Cash
@@ -111,6 +112,15 @@ class CurrencyCreateSerializer(ModelSerializer):
             'bought_price_currency',
             'date_of_bought',
         ]
+
+    def validate(self, data):
+        if data['bought_currency'].currency == data['bought_price'].currency:
+            raise serializers.ValidationError("Bought currency and currency which you pay can't be the same !")
+
+        if str(data['bought_currency'].currency) == self.context['request'].user.my_currency:
+            raise serializers.ValidationError("You can't buy your own currency !")
+
+        return data
 
 
 class CurrencyDetailSerializer(ModelSerializer):

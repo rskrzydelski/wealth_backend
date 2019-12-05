@@ -83,6 +83,14 @@ case $1 in
 		         get_token
                  http GET http://localhost:8000/api/v1/wallet/currency/chf "Authorization: JWT $TOKEN"
 		 ;;
+	 create_pln)
+		         get_token
+                 http POST http://localhost:8000/api/v1/resources/currency bought_currency="500" bought_currency_currency="PLN" bought_price="2000" bought_price_currency="PLN" date_of_bought="2019-12-26T12:01:36Z" "Authorization: JWT $TOKEN"
+		 ;;
+	create_pln_pay_usd)
+		         get_token
+                 http POST http://localhost:8000/api/v1/resources/currency bought_currency="500" bought_currency_currency="PLN" bought_price="2000" bought_price_currency="USD" date_of_bought="2019-12-26T12:01:36Z" "Authorization: JWT $TOKEN"
+		 ;;
      *)
 		 echo "Usage: test_client {metals|gold|silver|gold_sum|silver_sum|currency|usd|create_usd|my_fortune|metal_value|silver_value|gold_value|cash|currency_value|usd_value|eur_value|chf_value}"
 		 ;;
