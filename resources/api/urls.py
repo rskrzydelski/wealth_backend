@@ -9,4 +9,5 @@ urlpatterns = [
     re_path(r'currency$', views.CurrencyLstCreateAPIView.as_view(), name='curr-create-lst'),
     re_path(r'currency/(?P<pk>\d+)$', views.CurrencyDetailDelUpdateAPIView.as_view(), name='curr-detail'),
     re_path(r'cash$', views.CashLstCreateAPIView.as_view(), name='cash-create-lst'),
+    re_path(r'cash/(?P<pk>\d+)$', views.CashDetailUpdateDelAPIView.as_view(), name='cash-detail'),
 ]

@@ -11,6 +11,7 @@ from .serializers import (
     CurrencyDetailSerializer,
     CashListSerializer,
     CashCreateSerializer,
+    CashDetailSerializer,
 )
 from resources.models import Metal, Currency, Cash
 
@@ -151,3 +152,10 @@ class CashLstCreateAPIView(ListCreateAPIView):
     def perform_create(self, serializer):
         serializer.save(my_cash_currency=self.request.user.my_currency)
 
+
+class CashDetailUpdateDelAPIView(RetrieveUpdateDestroyAPIView):
+    serializer_class = CashDetailSerializer
+
+    def get_queryset(self):
+        queryset = Cash.objects.filter(owner=self.request.user)
+        return queryset

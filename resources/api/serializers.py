@@ -172,3 +172,12 @@ class CashCreateSerializer(ModelSerializer):
             'my_cash',
         ]
 
+
+class CashDetailSerializer(ModelSerializer):
+    class Meta:
+        model = Cash
+        fields = [
+            'owner',
+            'save_date',
+            'my_cash',
+        ]
