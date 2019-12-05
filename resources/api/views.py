@@ -121,12 +121,16 @@ class CashLstCreateAPIView(ListCreateAPIView):
     def get_queryset(self):
         query_sum = self.request.GET.get('sum')
 
-        if query_sum:
+        if query_sum == 'true':
             # make fake queryset with only one model with sum up data
             original_qs = Cash.objects.get_cash_list(owner=self.request.user)
             queryset = list()
             queryset.append(original_qs.first())
+        elif query_sum:
+            # incorrect query param
+            queryset = Cash.objects.none()
         else:
+            # without query param return list
             queryset = Cash.objects.get_cash_list(owner=self.request.user)
         return queryset
 
