@@ -1,4 +1,4 @@
-from rest_framework.generics import ListCreateAPIView, RetrieveAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.response import Response
 
 
@@ -103,7 +103,7 @@ class CurrencyLstCreateAPIView(ListCreateAPIView):
         serializer.save(owner=self.request.user)
 
 
-class CurrencyDetailAPIView(RetrieveAPIView):
+class CurrencyDetailDelUpdateAPIView(RetrieveUpdateDestroyAPIView):
     serializer_class = CurrencyDetailSerializer
 
     def get_queryset(self):
