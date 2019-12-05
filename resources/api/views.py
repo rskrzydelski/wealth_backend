@@ -1,4 +1,4 @@
-from rest_framework.generics import ListCreateAPIView, RetrieveAPIView
+from rest_framework.generics import ListCreateAPIView, RetrieveAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.response import Response
 
 
@@ -55,7 +55,7 @@ class MetalLstCreateAPIView(ListCreateAPIView):
         return Response(serializer.data)
 
 
-class MetalDetailAPIView(RetrieveAPIView):
+class MetalDetailDelUpdateAPIView(RetrieveUpdateDestroyAPIView):
     serializer_class = MetalDetailSerializer
 
     def get_queryset(self):

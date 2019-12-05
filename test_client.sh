@@ -35,6 +35,10 @@ case $1 in
 		         get_token
                  http POST http://localhost:8000/api/v1/resources/metals name="gold" bought_price="20000" amount="4" unit="kg" date_of_bought="2019-11-26T11:00:30Z" description="test gold create" "Authorization: JWT $TOKEN"
 		 ;;
+	 metal_delete)
+		         get_token
+                 http DELETE http://localhost:8000/api/v1/resources/metals/4 "Authorization: JWT $TOKEN"
+		 ;;
 	 currency)
                  get_token
                  http GET http://localhost:8000/api/v1/resources/currency "Authorization: JWT $TOKEN"
