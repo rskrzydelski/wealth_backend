@@ -11,3 +11,4 @@ urlpatterns = [
     re_path(r'currency$', views.currency_aggregator, name='currency-aggregate'),
     re_path(r'currency/(?P<slug>[\w-]+)$', views.currency_aggregator, name='currency-aggregate'),
 ]
+
