@@ -111,6 +111,8 @@ DATABASES = {
 
 AUTH_USER_MODEL = 'users.InvestorUser'
 
+REST_AUTH_REGISTER_SERIALIZERS = { 'REGISTER_SERIALIZER': 'auth.api.serializers.InvestorRegisterSerializer', }
+
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',

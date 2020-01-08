@@ -8,7 +8,7 @@ TOKEN="$(login)"
 
 case $1 in
      register)
-                 http POST http://localhost:8000/api/v1/auth/registration/ username="Julka" email="j@gmail.com" password1="Julka123julka" password2="Julka123julka" my_currency="CHF"
+                 http POST http://localhost:8000/api/v1/auth/registration/ username="rafal" email="rs@gmail.com" password="rafael86" password2="rafael86" my_currency="CHF"
          ;;
      reset_password)
                  http POST http://localhost:8000/api/v1/users/password_reset/reset_password/ email="j@gmail.com"
