@@ -49,8 +49,9 @@ INSTALLED_APPS = [
     'djmoney',
 
     'users.apps.UsersConfig',
-    'resources',
-    'wallet',
+    'resources.apps.ResourcesConfig',
+    'wallet.apps.WalletConfig',
+    'market.apps.MarketConfig',
 ]
 
 AUTH_USER_MODEL = 'users.InvestorUser'

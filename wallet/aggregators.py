@@ -1,19 +1,7 @@
 from decimal import Decimal
 
 from resources.models import Metal, Cash, Currency
-
-
-# mock values of metals - fetch from web will be implemented
-metal_prices = {
-    'silver': 110,
-    'gold': 6000,
-}
-
-currency_prices = {
-    'USD': Decimal(3.8),
-    'EUR': Decimal(4.2),
-    'CHF': Decimal(3.9),
-}
+from market.market_data import MarketData
 
 
 # classes needed for serializing
@@ -63,13 +51,13 @@ class Aggregator(object):
                 for name in Metal.METAL_CHOICES:
                     total_amount = Metal.objects.get_total_metal_amount(owner=self.owner, name=name[0])
                     try:
-                        total_cash += total_amount * metal_prices[name[0]]
+                        total_cash += total_amount * (MarketData.get_reource_price(name[0]) * MarketData.get_reource_price('USD'))
                     except:
                         continue
             else:
                 total_amount = Metal.objects.get_total_metal_amount(owner=self.owner, name=name)
                 try:
-                    total_cash = total_amount * metal_prices[name]
+                    total_cash = total_amount * (MarketData.get_reource_price(name) * MarketData.get_reource_price('USD'))
                 except:
                     total_cash = 0
         return Decimal(total_cash).__round__(2) or Decimal(0)
@@ -111,13 +99,13 @@ class Aggregator(object):
                     if name[0] == self.owner.my_currency:
                         continue
                     try:
-                        total_value += currency_prices[name[0]] * Currency.objects.get_total_currency(owner=self.owner,
-                                                                                                      currency=name[0])
+                        total_value += MarketData.get_reource_price(name[0]) * \
+                                       Currency.objects.get_total_currency(owner=self.owner, currency=name[0])
                     except:
                         continue
             else:
-                total_value = currency_prices[str(name).upper()] * Currency.objects.get_total_currency(owner=self.owner,
-                                                                                                       currency=name)
+                total_value = MarketData.get_reource_price(str(name).upper()) * \
+                              Currency.objects.get_total_currency(owner=self.owner, currency=name)
         return Decimal(total_value).__round__(2) or Decimal(0)
 
     @staticmethod
