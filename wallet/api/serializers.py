@@ -6,9 +6,9 @@ from ..aggregators import MetalWalletData, CashWalletData, CurrencyWalletData, W
 class MetalWalletSerializer(serializers.Serializer):
     name = serializers.CharField(max_length=20)
     my_currency = serializers.CharField(max_length=4)
-    total_cash = serializers.DecimalField(max_digits=7, decimal_places=2)
-    total_cash_spend = serializers.DecimalField(max_digits=7, decimal_places=2)
-    profit = serializers.DecimalField(max_digits=7, decimal_places=2)
+    total_cash = serializers.DecimalField(max_digits=10, decimal_places=2)
+    total_cash_spend = serializers.DecimalField(max_digits=10, decimal_places=2)
+    profit = serializers.DecimalField(max_digits=10, decimal_places=2)
 
     def create(self, validated_data):
         return MetalWalletData(**validated_data)
@@ -24,7 +24,7 @@ class MetalWalletSerializer(serializers.Serializer):
 
 class CashWalletSerializer(serializers.Serializer):
     my_currency = serializers.CharField(max_length=4)
-    cash = serializers.DecimalField(max_digits=7, decimal_places=2)
+    cash = serializers.DecimalField(max_digits=10, decimal_places=2)
 
     def create(self, validated_data):
         return CashWalletData(**validated_data)
@@ -35,7 +35,7 @@ class CashWalletSerializer(serializers.Serializer):
 
 
 class CurrencyWalletSerializer(serializers.Serializer):
-    total_value = serializers.DecimalField(max_digits=7, decimal_places=2)
+    total_value = serializers.DecimalField(max_digits=10, decimal_places=2)
     currency_name = serializers.CharField(max_length=4)
 
     def create(self, validated_data):
@@ -49,7 +49,7 @@ class CurrencyWalletSerializer(serializers.Serializer):
 
 class WalletSerializer(serializers.Serializer):
     title = serializers.CharField(max_length=200)
-    my_fortune = serializers.DecimalField(max_digits=7, decimal_places=2)
+    my_fortune = serializers.DecimalField(max_digits=10, decimal_places=2)
 
     def create(self, validated_data):
         return WalletData(**validated_data)
