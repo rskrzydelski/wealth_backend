@@ -23,5 +23,6 @@ urlpatterns = [
     path('api/v1/auth/', include('auth.api.urls')),
     path('api/v1/resources', include('resources.api.urls')),
     path('api/v1/wallet', include('wallet.api.urls')),
+    path('api/v1/market', include('market.api.urls')),
 ]
 

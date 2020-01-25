@@ -8,10 +8,18 @@ class MarketData(object):
     __resources = {
         "gold": Decimal(0),
         "silver": Decimal(0),
-        "PLN": Decimal(0),
-        "USD": Decimal(0),
-        "CHF": Decimal(0),
-        "EUR": Decimal(0),
+        "CHFPLN": Decimal(0),
+        "PLNCHF": Decimal(0),
+        "CHFUSD": Decimal(0),
+        "USDCHF": Decimal(0),
+        'CHFEUR': Decimal(0),
+        'EURCHF': Decimal(0),
+        'PLNUSD': Decimal(0),
+        'USDPLN': Decimal(0),
+        'PLNEUR': Decimal(0),
+        'EURPLN': Decimal(0),
+        'EURUSD': Decimal(0),
+        'USDEUR': Decimal(0),
     }
 
     @classmethod

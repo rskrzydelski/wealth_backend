@@ -8,10 +8,10 @@ from .market_data import MarketData
 
 
 class YahooMarketPrices(threading.Thread):
-    def __init__(self, thread_id, my_currency):
+    def __init__(self, thread_id):
         threading.Thread.__init__(self)
         self.thread_id = thread_id
-        self.fetcher = MarketPrices(my_currency)
+        self.fetcher = MarketPrices()
 
     def run(self):
         self.update_market()
@@ -21,24 +21,33 @@ class YahooMarketPrices(threading.Thread):
         while True:
             self.fetcher.fetch_currencies_market_prices()
             self.fetcher.fetch_metal_market_prices()
-            time.sleep(5)
+            time.sleep(60)
 
 
 class MarketPrices(object):
-    symbol = {
+    metal_symbol = {
         'gold': "GC=F",
         'silver': "SI=F",
     }
+    currency_symbol = {
+        'chfpln': 'CHFPLN=X',
+        'plnchf': 'PLNCHF=X',
+        'chfusd': 'CHFUSD=X',
+        'usdchf': 'USDCHF=X',
+        'chfeur': 'CHFEUR=X',
+        'eurchf': 'EURCHF=X',
+        'plnusd': 'PLNUSD=X',
+        'usdpln': 'USDPLN=X',
+        'plneur': 'PLNEUR=X',
+        'eurpln': 'EURPLN=X',
+        'eurusd': 'EURUSD=X',
+        'usdeur': 'USDEUR=X',
+    }
 
-    currencies = ('PLN', 'CHF', 'USD', 'EUR')
-
-    def __init__(self,
-                 my_currency='PLN',
-                 url_metals='https://in.finance.yahoo.com/commodities',):
+    def __init__(self, url_metals='https://in.finance.yahoo.com/commodities'):
         self.url_metals = url_metals
         self.url_host_currencies = 'https://finance.yahoo.com/quote/'
         self.url_query_currencies = '?&.tsrc=fin-srch'
-        self.my_currency = my_currency
 
     def fetch_metal_market_prices(self):
         try:
@@ -57,8 +66,8 @@ class MarketPrices(object):
 
             fileds_dict = {col[1].text: col[0] for col in enumerate(header_row.find_all('th'))}
 
-            gold_record = table_body.find(class_="data-row{}".format(self.symbol['gold']))
-            silver_record = table_body.find(class_="data-row{}".format(self.symbol['silver']))
+            gold_record = table_body.find(class_="data-row{}".format(self.metal_symbol['gold']))
+            silver_record = table_body.find(class_="data-row{}".format(self.metal_symbol['silver']))
 
             gold_items = gold_record.find_all('td')
             silver_items = silver_record.find_all('td')
@@ -77,25 +86,19 @@ class MarketPrices(object):
         return True
 
     def fetch_currencies_market_prices(self):
-        try:
-            query = []
-            for c in self.currencies:
-                if c == self.my_currency:
-                    continue
-                query.append(c + self.my_currency + '=X')
-        except requests.exceptions.ConnectionError as e:
-            print(e)
-            return False
-
-        try:
-            for q in query:
+        for q in self.currency_symbol.values():
+            try:
                 page = requests.get(self.url_host_currencies + q + self.url_query_currencies)
-                soup = BeautifulSoup(page.content, 'html.parser')
+            except requests.exceptions.ConnectionError as e:
+                print(e)
+                return False
+            soup = BeautifulSoup(page.content, 'html.parser')
+            try:
                 value = Decimal(soup.find_all('span')[5].text.replace(",", ""))
-                MarketData.set_resource_price(q[:3], value)
-        except (AttributeError, KeyError, IndexError, InvalidOperation) as e:
-            print(e)
-            return False
+                MarketData.set_resource_price(q[:6], value)
+            except (AttributeError, KeyError, IndexError, InvalidOperation) as e:
+                print(e)
+                return False
         return True
 
 
