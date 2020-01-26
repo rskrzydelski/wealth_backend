@@ -54,8 +54,6 @@ INSTALLED_APPS = [
     'market.apps.MarketConfig',
 ]
 
-AUTH_USER_MODEL = 'users.InvestorUser'
-
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 SITE_ID = 1
