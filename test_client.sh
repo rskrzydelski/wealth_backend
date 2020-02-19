@@ -1,11 +1,11 @@
 #!/bin/bash
 
 login() {
-  echo $(http POST http://localhost:8000/api/v1/auth/login/ username=raf email=r@gmail.com password=raf | cut -d : -f 2 | cut -d , -f 1) | sed 's/"//' | sed 's/"//' | sed 's/}//'
+  echo $(http POST http://localhost:8000/api/v1/auth/login/ username=rafal email=rs@gmail.com password=rafael86 my_currency=USD | cut -d : -f 2 | cut -d , -f 1) | sed 's/"//' | sed 's/"//' | sed 's/}//'
 }
 
 TOKEN="$(login)"
-
+echo $TOKEN
 case $1 in
      register)
                  http POST http://localhost:8000/api/v1/auth/registration/ username="rafal" email="rs@gmail.com" password="rafael86" password2="rafael86" my_currency="CHF"

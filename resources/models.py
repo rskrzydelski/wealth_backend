@@ -74,7 +74,7 @@ class MetalManager(models.Manager):
             total = total_spend['total_cash_spend']
         if not total:
             total = Decimal(0)
-        return total
+        return total.__round__(2)
 
 
 # data model common for all metals

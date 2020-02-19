@@ -51,13 +51,14 @@ class Aggregator(object):
                 for name in Metal.METAL_CHOICES:
                     total_amount = Metal.objects.get_total_metal_amount(owner=self.owner, name=name[0])
                     try:
-                        total_cash += total_amount * (MarketData.get_reource_price(name[0]) * MarketData.get_reource_price('USD'))
+                        total_cash += total_amount * (MarketData.get_reource_price(name[0]) * MarketData.get_reource_price('USDPLN'))
                     except:
                         continue
             else:
                 total_amount = Metal.objects.get_total_metal_amount(owner=self.owner, name=name)
+                print(total_amount)
                 try:
-                    total_cash = total_amount * (MarketData.get_reource_price(name) * MarketData.get_reource_price('USD'))
+                    total_cash = total_amount * (MarketData.get_reource_price(name) * MarketData.get_reource_price('USDPLN'))
                 except:
                     total_cash = 0
         return Decimal(total_cash).__round__(2) or Decimal(0)
