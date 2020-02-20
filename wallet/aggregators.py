@@ -29,7 +29,7 @@ class CurrencyWalletData(object):
 class WalletData(object):
     def __init__(self, title=None, my_fortune=None):
         self.title = title
-        self.my_fortune=my_fortune
+        self.my_fortune = my_fortune
 
 
 # aggregation class
@@ -52,16 +52,18 @@ class Aggregator(object):
                     total_amount = Metal.objects.get_total_metal_amount(owner=self.owner, name=name[0])
                     try:
                         total_cash += total_amount * (MarketData.get_reource_price(name[0]) * MarketData.get_reource_price('USDPLN'))
-                    except:
-                        continue
+                    except TypeError as e:
+                        print('Something goes wrong :/ {}'.format(e))
+                        return None
             else:
                 total_amount = Metal.objects.get_total_metal_amount(owner=self.owner, name=name)
                 print(total_amount)
                 try:
                     total_cash = total_amount * (MarketData.get_reource_price(name) * MarketData.get_reource_price('USDPLN'))
-                except:
-                    total_cash = 0
-        return Decimal(total_cash).__round__(2) or Decimal(0)
+                except TypeError as e:
+                    print('Something goes wrong :/ {}'.format(e))
+                    return None
+        return Decimal(total_cash).__round__(2)
 
     def get_metal_cash_spend(self, name=None):
 
@@ -71,11 +73,12 @@ class Aggregator(object):
                 for name in Metal.METAL_CHOICES:
                     try:
                         spend_cash += Metal.objects.get_total_metal_cash_spend(owner=self.owner, name=name[0])
-                    except:
-                        continue
+                    except TypeError as e:
+                        print('Something goes wrong :/ {}'.format(e))
+                        return None
             else:
                 spend_cash = Metal.objects.get_total_metal_cash_spend(owner=self.owner, name=name)
-        return Decimal(spend_cash).__round__(2) or Decimal(0)
+        return Decimal(spend_cash).__round__(2)
 
     def get_my_cash(self):
         """
@@ -84,7 +87,7 @@ class Aggregator(object):
         :return (Decimal) total_cash
         """
         total_cash = Cash.objects.get_total_cash(owner=self.owner)
-        return Decimal(total_cash).__round__(2) or Decimal(0)
+        return Decimal(total_cash).__round__(2)
 
     def get_currency_value(self, name=None):
         """
@@ -96,18 +99,24 @@ class Aggregator(object):
         total_value = 0
         if self._validate_currency_name(name=name, my_currency=self.owner.my_currency):
             if name is None:
+                print('before for')
                 for name in Currency.CURRENCY_CHOICES:
                     if name[0] == self.owner.my_currency:
                         continue
                     try:
                         total_value += MarketData.get_reource_price(name[0]) * \
                                        Currency.objects.get_total_currency(owner=self.owner, currency=name[0])
-                    except:
-                        continue
+                    except TypeError as e:
+                        print('Something goes wrong :/ {}'.format(e))
+                        return None
             else:
-                total_value = MarketData.get_reource_price(str(name).upper()) * \
-                              Currency.objects.get_total_currency(owner=self.owner, currency=name)
-        return Decimal(total_value).__round__(2) or Decimal(0)
+                try:
+                    total_value = MarketData.get_reource_price(str(name).upper()) * \
+                                  Currency.objects.get_total_currency(owner=self.owner, currency=name)
+                except TypeError as e:
+                    print('Something goes wrong :/ {}'.format(e))
+                    return None
+        return Decimal(total_value).__round__(2)
 
     @staticmethod
     def _validate_metal_name(name=None):
