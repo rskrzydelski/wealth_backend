@@ -176,7 +176,7 @@ class CashManager(models.Manager):
         :returns (Decimal) [my cash amount]
         '''
         total_cash = super(CashManager, self).filter(owner=owner).aggregate(my_cash=Sum('my_cash'))
-        return total_cash['my_cash'] or Decimal(0)
+        return Decimal(total_cash['my_cash']).__round__(2) or Decimal(0)
 
 
 class Cash(models.Model):

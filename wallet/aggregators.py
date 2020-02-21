@@ -34,89 +34,70 @@ class WalletData(object):
 
 # aggregation class
 class Aggregator(object):
+    """
+    Aggregator: methods for calc asset value by name or if None give all particular asset value.
+    """
     def __init__(self, owner=None):
         self.owner = owner
 
-    def get_current_metal_value(self, name=None):
-        """
-        Aggregator:
-        get_current_metal_value - returns particular metal value or all metals value base on market prices
-        :param name:
-        :return: (Decimal) silver value, gold value, all metals value
-        """
-        total_cash = 0
+    def view_get_metal_value(self, name=None):
         if self._validate_metal_name(name=name):
-            if name is None:
-                total_cash = 0
-                for name in Metal.METAL_CHOICES:
-                    total_amount = Metal.objects.get_total_metal_amount(owner=self.owner, name=name[0])
-                    try:
-                        total_cash += total_amount * (MarketData.get_reource_price(name[0]) * MarketData.get_reource_price('USDPLN'))
-                    except TypeError as e:
-                        print('Something goes wrong :/ {}'.format(e))
-                        return None
+            if name is not None:
+                value = self._calc_metal_value(owner=self.owner, name=name)
             else:
-                total_amount = Metal.objects.get_total_metal_amount(owner=self.owner, name=name)
-                print(total_amount)
-                try:
-                    total_cash = total_amount * (MarketData.get_reource_price(name) * MarketData.get_reource_price('USDPLN'))
-                except TypeError as e:
-                    print('Something goes wrong :/ {}'.format(e))
-                    return None
-        return Decimal(total_cash).__round__(2)
+                values = [self._calc_metal_value(owner=self.owner, name=name[0]) for name in Metal.METAL_CHOICES]
+                value = (sum(values) if None not in values else None)
+            return value
+        return None
 
-    def get_metal_cash_spend(self, name=None):
-
-        spend_cash = 0
+    def view_get_metal_cash_spend(self, name=None):
         if self._validate_metal_name(name=name):
-            if name is None:
-                for name in Metal.METAL_CHOICES:
-                    try:
-                        spend_cash += Metal.objects.get_total_metal_cash_spend(owner=self.owner, name=name[0])
-                    except TypeError as e:
-                        print('Something goes wrong :/ {}'.format(e))
-                        return None
+            if name is not None:
+                cash_spend = Metal.objects.get_total_metal_cash_spend(owner=self.owner, name=name)
             else:
-                spend_cash = Metal.objects.get_total_metal_cash_spend(owner=self.owner, name=name)
-        return Decimal(spend_cash).__round__(2)
+                values = [Metal.objects.get_total_metal_cash_spend(owner=self.owner, name=name[0])
+                          for name in Metal.METAL_CHOICES]
+                cash_spend = (sum(values) if None not in values else None)
+            return cash_spend
+        return None
 
-    def get_my_cash(self):
-        """
-        Aggregator:
-        get_my_cash - returns my total cash
-        :return (Decimal) total_cash
-        """
+    def view_get_my_cash(self):
         total_cash = Cash.objects.get_total_cash(owner=self.owner)
-        return Decimal(total_cash).__round__(2)
+        return total_cash
 
-    def get_currency_value(self, name=None):
-        """
-        Aggregator:
-        get_currency_value - returns currency value of particular currency or aggregate value of all currency
-        :param name:
-        :return (Decimal) currency value
-        """
-        total_value = 0
+    def view_get_currency_value(self, name=None):
         if self._validate_currency_name(name=name, my_currency=self.owner.my_currency):
-            if name is None:
-                print('before for')
-                for name in Currency.CURRENCY_CHOICES:
-                    if name[0] == self.owner.my_currency:
-                        continue
-                    try:
-                        total_value += MarketData.get_reource_price(name[0]) * \
-                                       Currency.objects.get_total_currency(owner=self.owner, currency=name[0])
-                    except TypeError as e:
-                        print('Something goes wrong :/ {}'.format(e))
-                        return None
+            if name is not None:
+                value = self._calc_currency_value()
             else:
-                try:
-                    total_value = MarketData.get_reource_price(str(name).upper()) * \
-                                  Currency.objects.get_total_currency(owner=self.owner, currency=name)
-                except TypeError as e:
-                    print('Something goes wrong :/ {}'.format(e))
-                    return None
-        return Decimal(total_value).__round__(2)
+                values = [self._calc_currency_value(owner=self.owner, name=name[0])
+                          for name in Currency.CURRENCY_CHOICES if name[0] != self.owner.my_currency]
+                value = (sum(values) if None not in values else None)
+            return value
+        return None
+
+    @staticmethod
+    def _calc_metal_value(owner, name):
+        exchange_rate = 'USD' + owner.my_currency.upper()
+        oz_amount = Metal.objects.get_total_metal_amount(owner=owner, name=name)
+        oz_market_value = MarketData.get_reource_price(name)
+        currency_value = MarketData.get_reource_price(exchange_rate)
+        try:
+            value = Decimal(oz_amount * oz_market_value * currency_value).__round__(2)
+        except TypeError:
+            value = None
+        return value
+
+    @staticmethod
+    def _calc_currency_value(owner, name):
+        exchange_rate = str(name).upper() + owner.my_currency.upper()
+        market_value = MarketData.get_reource_price(exchange_rate)
+        currency_amount = Currency.objects.get_total_currency(owner=owner, currency=name)
+        try:
+            value = Decimal(market_value * currency_amount).__round__(2)
+        except TypeError:
+            value = None
+        return value
 
     @staticmethod
     def _validate_metal_name(name=None):
