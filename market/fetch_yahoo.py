@@ -94,7 +94,7 @@ class MarketPrices(object):
                 return False
             soup = BeautifulSoup(page.content, 'html.parser')
             try:
-                value = Decimal(soup.find_all('span')[5].text.replace(",", ""))
+                value = Decimal(soup.find_all('span')[6].text)
                 MarketData.set_resource_price(q[:6], value)
             except (AttributeError, KeyError, IndexError, InvalidOperation) as e:
                 print(e)
