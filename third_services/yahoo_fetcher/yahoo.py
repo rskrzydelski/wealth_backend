@@ -1,30 +1,9 @@
 import requests
-import threading
-import time
 from bs4 import BeautifulSoup
 from decimal import Decimal, InvalidOperation
 
-from .market_data import MarketData
 
-
-class YahooMarketPrices(threading.Thread):
-    def __init__(self, thread_id):
-        threading.Thread.__init__(self)
-        self.thread_id = thread_id
-        self.fetcher = MarketPrices()
-
-    def run(self):
-        self.update_market()
-        print('exit thread')
-
-    def update_market(self):
-        while True:
-            self.fetcher.fetch_currencies_market_prices()
-            self.fetcher.fetch_metal_market_prices()
-            time.sleep(60)
-
-
-class MarketPrices(object):
+class MarketYahooPrices(object):
     metal_symbol = {
         'gold': "GC=F",
         'silver': "SI=F",
@@ -50,11 +29,13 @@ class MarketPrices(object):
         self.url_query_currencies = '?&.tsrc=fin-srch'
 
     def fetch_metal_market_prices(self):
+        data = {}
+
         try:
             page = requests.get(self.url_metals)
         except requests.exceptions.ConnectionError as e:
             print(e)
-            return False
+            return None
 
         soup = BeautifulSoup(page.content, 'html.parser')
 
@@ -76,30 +57,29 @@ class MarketPrices(object):
             silver_price = Decimal(silver_items[fileds_dict['Last price']].get_text().replace(",", ""))
         except (AttributeError, KeyError, IndexError, InvalidOperation) as e:
             print(e)
-            return False
+            return None
 
         if gold_price == 0 or silver_price == 0:
-            return False
+            return None
 
-        MarketData.set_resource_price('gold', gold_price)
-        MarketData.set_resource_price('silver', silver_price)
-        return True
+        data['gold'] = gold_price
+        data['silver'] = silver_price
+
+        return data
 
     def fetch_currencies_market_prices(self):
+        data = {}
         for q in self.currency_symbol.values():
             try:
                 page = requests.get(self.url_host_currencies + q + self.url_query_currencies)
             except requests.exceptions.ConnectionError as e:
                 print(e)
-                return False
+                return None
             soup = BeautifulSoup(page.content, 'html.parser')
             try:
                 value = Decimal(soup.find_all('span')[6].text)
-                MarketData.set_resource_price(q[:6], value)
+                data[q[:6]] = value
             except (AttributeError, KeyError, IndexError, InvalidOperation) as e:
                 print(e)
-                return False
-        return True
-
-
-
+                return None
+        return data
