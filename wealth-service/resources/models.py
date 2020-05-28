@@ -51,30 +51,11 @@ class MetalManager(models.Manager):
         """
         if name is None:
             return None
-        total_amount = super(MetalManager, self).filter(owner=owner, name=name, unit=unit).aggregate(total_amount=Sum('amount'))
-        return total_amount['total_amount'] or 0
 
-    def get_total_metal_cash_spend(self, owner=None, name=None, unit='oz'):
-        """
-        MetalManager:
-        get_total_metal_cash_spend - returns total cash spend of particular metal or all metals
-        :param name [silver, gold, none]
-        :param owner
-        :param unit [oz]
-        :returns (Decimal) [silver cash spend, gold cash spend, all metals cash spend]
-        """
-        total_spend, total = 0, 0
-
-        if name is None:
-            return Decimal(0)
-        if name:
-            total_spend = super(MetalManager, self)\
-                         .filter(owner=owner, name=name, unit=unit)\
-                         .aggregate(total_cash_spend=Sum('bought_price'))
-            total = total_spend['total_cash_spend']
-        if not total:
-            total = Decimal(0)
-        return total.__round__(2)
+        amount = super(MetalManager, self).filter(owner=owner,
+                                                  name=name,
+                                                  unit=unit).aggregate(total_amount=Sum('amount'))
+        return amount.get('total_amount') or Decimal(0)
 
 
 # data model common for all metals
@@ -86,8 +67,11 @@ class Metal(Resource):
     objects = MetalManager()
 
     METAL_CHOICES = [
-        ('silver', 'Silver'),
-        ('gold', 'Gold'),
+        ('silver999', 'Silver999'),
+        ('silver800', 'Silver800'),
+        ('gold999', 'Gold999'),
+        ('gold585', 'Gold585'),
+        ('gold333', 'Gold333'),
     ]
     UNIT_CHOICES = [
         ('oz', 'ounce'),
@@ -97,7 +81,7 @@ class Metal(Resource):
     name = models.CharField(
         max_length=10,
         choices=METAL_CHOICES,
-        default='Ag',
+        default='silver999',
     )
     unit = models.CharField(max_length=10,
                             choices=UNIT_CHOICES,
@@ -135,8 +119,9 @@ class CurrencyManager(models.Manager):
         '''
         if currency is None:
             return None
-        total_currency = super(CurrencyManager, self).filter(owner=owner, bought_currency_currency__icontains=currency)\
-                                                     .aggregate(bought_currency=Sum('bought_currency'))
+        total_currency = super(CurrencyManager, self).filter(owner=owner,
+                                                             bought_currency_currency__icontains=currency)\
+            .aggregate(bought_currency=Sum('bought_currency'))
         return total_currency['bought_currency'] or Decimal(0)
 
 
@@ -203,19 +188,3 @@ class Cash(models.Model):
     def __str__(self):
         return '{} cash {}'.format(self.owner.username, self.my_cash)
 
-# class Land(Resource):
-#     LAND_CHOICES = [
-#         ('f', 'farmland'),
-#         ('b', 'building'),
-#     ]
-#     AREA_TYPE = [
-#         ('h', 'hectare'),
-#     ]
-#     type = models.CharField(
-#         max_length=10,
-#         choices=LAND_CHOICES,
-#         default='b',
-#     )
-#     area_unit = models.CharField(max_length=10,
-#                                  choices=AREA_TYPE,
-#                                  default='h')

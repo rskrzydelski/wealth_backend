@@ -52,7 +52,6 @@ INSTALLED_APPS = [
     'users.apps.UsersConfig',
     'resources.apps.ResourcesConfig',
     'wallet.apps.WalletConfig',
-    'market_fetcher.apps.MarketConfig',
 ]
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
