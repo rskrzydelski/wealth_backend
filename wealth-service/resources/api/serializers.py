@@ -60,11 +60,6 @@ class MetalCreateSerializer(ModelSerializer):
             'description',
         ]
 
-    def validate_unit(self, value):
-        if value != 'oz':
-            raise serializers.ValidationError("For now only oz unit is supported.")
-        return value
-
 
 class MetalDetailSerializer(ModelSerializer):
     bought_price = SerializerMethodField('get_bought_price')
