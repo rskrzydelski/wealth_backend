@@ -13,11 +13,9 @@ class Resource(models.Model):
     Resource:
     Common data for metal and currency resource
     """
-    CURRENCY_CHOICES = [('USD', 'USD $'), ('EUR', 'EUR €'), ('PLN', 'PLN ZŁ'), ('CHF', 'CHF +')]
     owner = models.ForeignKey(InvestorUser, on_delete=models.CASCADE, default=1)
     bought_price = MoneyField(max_digits=10,
                               decimal_places=2,
-                              currency_choices=CURRENCY_CHOICES,
                               default_currency='PLN')
     date_of_bought = models.DateTimeField(auto_now_add=False)
 
@@ -86,7 +84,6 @@ class Metal(Resource):
     unit = models.CharField(max_length=10,
                             choices=UNIT_CHOICES,
                             default='oz')
-
     amount = models.DecimalField(max_digits=10, decimal_places=0, default=0)
     description = models.TextField(blank=True, help_text='Type some information about this transaction (optional)')
 
@@ -136,7 +133,6 @@ class Currency(Resource):
                                  decimal_places=2,
                                  null=True,
                                  blank=True,
-                                 currency_choices=Resource.CURRENCY_CHOICES,
                                  default_currency='CHF')
 
     def __str__(self):
@@ -182,7 +178,6 @@ class Cash(models.Model):
     my_cash = MoneyField(max_digits=10,
                          decimal_places=2,
                          null=True, blank=True,
-                         currency_choices=Resource.CURRENCY_CHOICES,
                          default_currency='PLN')
 
     def __str__(self):
