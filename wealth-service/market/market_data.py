@@ -5,23 +5,42 @@ class MarketData(object):
     def __init__(self):
         pass
 
-    __resources = {
-        "gold": Decimal(0),
-        "silver": Decimal(0),
-        "CHFPLN": Decimal(0),
-        "PLNCHF": Decimal(0),
-        "CHFUSD": Decimal(0),
-        "USDCHF": Decimal(0),
-        'CHFEUR': Decimal(0),
-        'EURCHF': Decimal(0),
-        'PLNUSD': Decimal(0),
-        'USDPLN': Decimal(0),
-        'PLNEUR': Decimal(0),
-        'EURPLN': Decimal(0),
-        'EURUSD': Decimal(0),
-        'USDEUR': Decimal(0),
-    }
+    @staticmethod
+    def get_metal_market_price(name, unit, currency, service_name):
+        if name == 'gold999':
+            if unit == 'oz':
+                return Decimal(7300)
+            if unit == 'g':
+                return Decimal(204.5)
+            if unit == 'kg':
+                return Decimal(234726)
+        if name == 'gold585':
+            if unit == 'oz':
+                return Decimal(3732)
+            if unit == 'g':
+                return Decimal(120)
+            if unit == 'kg':
+                return Decimal(120000)
+        if name == 'gold333':
+            if unit == 'oz':
+                return Decimal(2145.9)
+            if unit == 'g':
+                return Decimal(69)
+            if unit == 'kg':
+                return Decimal(69000)
+        if name == 'silver999':
+            if unit == 'oz':
+                return Decimal(100)
+            if unit == 'g':
+                return Decimal(3.2)
+            if unit == 'kg':
+                return Decimal(3200)
+        if name == 'silver800':
+            if unit == 'oz':
+                return Decimal(43.54)
+            if unit == 'g':
+                return Decimal(1.4)
+            if unit == 'kg':
+                return Decimal(1400)
 
-    @classmethod
-    def get_reource_price(cls, name):
-        return cls.__resources.get(name)
+        return Decimal(0)
