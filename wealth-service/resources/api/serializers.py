@@ -1,5 +1,5 @@
 from rest_framework.serializers import ModelSerializer, SerializerMethodField
-from resources.models import Metal, Currency, Cash
+from resources.models import Metal, Cash
 
 
 class MetalListSerializer(ModelSerializer):
@@ -49,58 +49,7 @@ class MetalDetailSerializer(ModelSerializer):
         return str(obj.bought_price)
 
 
-class CurrencyListSerializer(ModelSerializer):
-    currency = SerializerMethodField('get_currency')
 
-    class Meta:
-        model = Currency
-        fields = [
-            'owner',
-            'currency',
-            'bought_currency',
-            'bought_price',
-            'date_of_bought',
-        ]
-
-    def get_currency(self, obj):
-        return str(obj.bought_currency_currency)
-
-
-class CurrencyCreateSerializer(ModelSerializer):
-    class Meta:
-        model = Currency
-        fields = [
-            'bought_currency',
-            'bought_currency_currency',
-            'bought_price',
-            'bought_price_currency',
-            'date_of_bought',
-        ]
-
-    def validate(self, data):
-        # if data['bought_currency'].currency == data['bought_price'].currency:
-        #     raise serializers.ValidationError("Bought currency and currency which you pay can't be the same !")
-        #
-        # if str(data['bought_currency'].currency) == self.context['request'].user.my_currency:
-        #     raise serializers.ValidationError("You can't buy your own currency !")
-        print(data)
-        return data
-
-
-class CurrencyDetailSerializer(ModelSerializer):
-    currency = SerializerMethodField('get_currency')
-
-    class Meta:
-        model = Currency
-        fields = [
-            'currency',
-            'bought_currency',
-            'bought_price',
-            'date_of_bought',
-        ]
-
-    def get_currency(self, obj):
-        return str(obj.bought_currency_currency)
 
 
 class CashListSerializer(ModelSerializer):

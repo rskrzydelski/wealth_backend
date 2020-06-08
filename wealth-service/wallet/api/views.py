@@ -3,8 +3,8 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 
 
-from .serializers import MetalWalletSerializer, CashWalletSerializer, CurrencyWalletSerializer, WalletSerializer
-from ..wallet import Wallet, MetalWalletData, CashWalletData, CurrencyWalletData, WalletData
+from .serializers import MetalWalletSerializer, CashWalletSerializer, WalletSerializer
+from ..wallet import Wallet, MetalWalletData, CashWalletData, WalletData
 from resources.models import Metal
 
 
@@ -73,22 +73,7 @@ def metal_wallet(request, slug=None, resource_id=None):
 #     serializer = CashWalletSerializer(instance)
 #     return Response(serializer.data)
 
-#
-# @api_view(['GET'])
-# def currency_wallet(request, slug=None):
-#     aggregator = Aggregator(owner=request.user)
-#     total_value = aggregator.view_get_currency_value(name=slug)
-#
-#     if slug is None:
-#         slug = 'All currences'
-#
-#     if total_value is None:
-#         slug = 'Market data is not available'
-#
-#     instance = CurrencyWalletData(currency_name=slug,
-#                                   total_value=total_value)
-#     serializer = CurrencyWalletSerializer(instance)
-#     return Response(serializer.data)
+
 
 
 # @api_view(['GET'])

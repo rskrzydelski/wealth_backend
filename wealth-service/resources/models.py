@@ -91,54 +91,6 @@ class Metal(Resource):
         return self.get_name_display()
 
 
-class CurrencyManager(models.Manager):
-    def get_currency_list(self, owner=None, currency=None):
-        '''
-        CurrencyManager:
-        get_currency_list - returns list of particular currency or all currences
-        :param currency [USD, EUR, CHF, PLN]
-        :param owner
-        :returns (Queryset) [usd list, eur list, chf list, pln list, all currency list]
-        '''
-        if currency:
-            qs = super(CurrencyManager, self).filter(owner=owner, bought_currency_currency__icontains=currency)
-        else:
-            qs = super(CurrencyManager, self).filter(owner=owner)
-        return qs
-
-    def get_total_currency(self, owner=None, currency=None):
-        '''
-        CurrencyManager:
-        get_total_currency - returns total amount of particular currency
-        :param currency [USD, EUR, CHF, PLN]
-        :param owner
-        :returns (Decimal) [usd amount, eur amount, chf amount, pln amount, None]
-        '''
-        if currency is None:
-            return None
-        total_currency = super(CurrencyManager, self).filter(owner=owner,
-                                                             bought_currency_currency__icontains=currency)\
-            .aggregate(bought_currency=Sum('bought_currency'))
-        return total_currency['bought_currency'] or Decimal(0)
-
-
-class Currency(Resource):
-    """
-    Currency:
-    Currency data
-    """
-    objects = CurrencyManager()
-
-    bought_currency = MoneyField(max_digits=10,
-                                 decimal_places=2,
-                                 null=True,
-                                 blank=True,
-                                 default_currency='CHF')
-
-    def __str__(self):
-        return 'Currency'
-
-
 class CashManager(models.Manager):
     def get_cash_list(self, owner=None):
         '''

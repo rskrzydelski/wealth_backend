@@ -5,14 +5,11 @@ from .serializers import (
     MetalListSerializer,
     MetalCreateSerializer,
     MetalDetailSerializer,
-    CurrencyListSerializer,
-    CurrencyCreateSerializer,
-    CurrencyDetailSerializer,
     CashListSerializer,
     CashCreateSerializer,
     CashDetailSerializer,
 )
-from resources.models import Metal, Currency, Cash
+from resources.models import Metal, Cash
 
 
 class MetalLstCreateAPIView(ListCreateAPIView):
@@ -42,38 +39,6 @@ class MetalDetailDelUpdateAPIView(RetrieveUpdateDestroyAPIView):
 
     def get_queryset(self):
         queryset = Metal.objects.filter(owner=self.request.user)
-        return queryset
-
-
-class CurrencyLstCreateAPIView(ListCreateAPIView):
-    def get_serializer_class(self):
-        if self.request.method == 'GET':
-            return CurrencyListSerializer
-        else:
-            return CurrencyCreateSerializer
-
-    def get_queryset(self):
-        query_name = self.request.GET.get('name')
-        if query_name:
-            queryset = Currency.objects.get_currency_list(owner=self.request.user, currency=query_name)
-        else:
-            queryset = Currency.objects.get_currency_list(owner=self.request.user)
-        return queryset
-
-    def list(self, request, *args, **kwargs):
-        queryset = self.get_queryset()
-        serializer = self.get_serializer_class()(queryset, many=True)
-        return Response(serializer.data)
-
-    def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)
-
-
-class CurrencyDetailDelUpdateAPIView(RetrieveUpdateDestroyAPIView):
-    serializer_class = CurrencyDetailSerializer
-
-    def get_queryset(self):
-        queryset = Currency.objects.filter(owner=self.request.user)
         return queryset
 
 
