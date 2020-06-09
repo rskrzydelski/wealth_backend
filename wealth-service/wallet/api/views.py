@@ -1,7 +1,7 @@
+from decimal import Decimal
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import api_view
-
 
 from .serializers import MetalWalletSerializer, CashWalletSerializer, WalletSerializer
 from ..wallet import Wallet, MetalWalletData, CashWalletData, WalletData
@@ -64,34 +64,26 @@ def metal_wallet(request, slug=None, resource_id=None):
     return Response(serializer.data)
 
 
-# @api_view(['GET'])
-# def cash_wallet(request):
-#     aggregator = Aggregator(owner=request.user)
-#     my_cash = aggregator.view_get_my_cash()
-#     instance = CashWalletData(my_currency=request.user.my_currency,
-#                                 cash=my_cash)
-#     serializer = CashWalletSerializer(instance)
-#     return Response(serializer.data)
+@api_view(['GET'])
+def cash_wallet(request):
+    wallet = Wallet(owner=request.user)
+    my_cash = wallet.get_all_my_cash()
+    instance = CashWalletData(my_currency=request.user.my_currency, cash=my_cash)
+    serializer = CashWalletSerializer(instance)
+    return Response(serializer.data)
 
 
+@api_view(['GET'])
+def wallet(request):
+    title = 'Summary of all assets value'
+    wallet = Wallet(owner=request.user)
 
-
-# @api_view(['GET'])
-# def wallet_aggregator(request):
-#     title = 'Summary of my all assets in my currency'
-#     aggregator = Aggregator(owner=request.user)
-#
-#     total_metal_cash = aggregator.view_get_metal_value(name=None)
-#     my_cash = aggregator.view_get_my_cash()
-#     currency_value = aggregator.view_get_currency_value(name=None)
-#
-#     if total_metal_cash is None or my_cash is None or currency_value is None:
-#         title = 'Market data is not available'
-#         my_fortune = None
-#     else:
-#         my_fortune = total_metal_cash + my_cash + currency_value
-#
-#     instance = WalletData(title=title, my_fortune=my_fortune)
-#     serializer = WalletSerializer(instance)
-#
-#     return Response(serializer.data)
+    metal_value = wallet.get_all_metals_value()
+    my_cash = wallet.get_all_my_cash()
+    my_fortune = metal_value + my_cash
+    if metal_value is None:
+        title = "Market data is not available"
+        my_fortune = Decimal(0)
+    instance = WalletData(title=title, my_fortune=my_fortune)
+    serializer = WalletSerializer(instance)
+    return Response(serializer.data)

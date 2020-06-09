@@ -36,12 +36,14 @@ class Wallet(object):
         self.owner = owner
 
     def get_metal_value(self, name, resource_id):
+        value = Decimal(0)
         metal = Metal.objects.filter(owner=self.owner, name=name, id=resource_id).first()
-        single_unit_value = MarketData.get_metal_market_price(name=name,
-                                                              unit=metal.unit,
-                                                              currency=self.owner.my_currency,
-                                                              service_name='my-service')
-        value = single_unit_value * metal.amount
+        if metal:
+            single_unit_value = MarketData.get_metal_market_price(name=name,
+                                                                  unit=metal.unit,
+                                                                  currency=self.owner.my_currency,
+                                                                  service_name='my-service')
+            value = single_unit_value * metal.amount
         return value.__round__(2)
 
     def get_metals_value(self, name):
@@ -65,7 +67,7 @@ class Wallet(object):
 
     def get_metal_cash_spend(self, name, resource_id):
         metal = Metal.objects.filter(owner=self.owner, name=name, id=resource_id).first()
-        return metal.bought_price.amount
+        return metal.bought_price.amount if metal else Decimal(0)
 
     def get_metals_cash_spend(self, name):
         result = Metal.objects.filter(owner=self.owner, name=name).aggregate(value=Sum('bought_price'))
@@ -73,7 +75,7 @@ class Wallet(object):
 
     def get_all_metals_cash_spend(self):
         result = Metal.objects.filter(owner=self.owner).aggregate(value=Sum('bought_price'))
-        return result['value']
+        return result['value'] if result['value'] is not None else Decimal(0)
 
     def get_metal_profit(self, name, resource_id):
         return \
