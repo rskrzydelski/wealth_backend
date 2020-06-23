@@ -41,20 +41,25 @@ INSTALLED_APPS = [
 
     'rest_framework',
     'rest_framework.authtoken',
-    'rest_auth',
     'django.contrib.sites',
-    'allauth',
-    'allauth.account',
-    'rest_auth.registration',
     'corsheaders',
     'djmoney',
+    'djoser',
 
-    'users.apps.UsersConfig',
+    'auth_app.apps.AuthAppConfig',
     'resources.apps.ResourcesConfig',
     'wallet.apps.WalletConfig',
 ]
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = 'smtp.sendgrid.com'
+# EMAIL_PORT = 587
+# EMAIL_HOST_USER = 'wealth_app'
+# EMAIL_HOST_PASSWORD = 'fmwosfkrjxmtuvyt'
+# EMAIL_USE_TLS = True
+# DEFAULT_FROM_EMAIL = 'TestSite Team <noreply@example.com>'
+
 
 SITE_ID = 1
 
@@ -108,9 +113,26 @@ DATABASES = {
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
 
-AUTH_USER_MODEL = 'users.InvestorUser'
+AUTH_USER_MODEL = 'auth_app.InvestorUser'
 
-REST_AUTH_REGISTER_SERIALIZERS = { 'REGISTER_SERIALIZER': 'auth.api.serializers.InvestorRegisterSerializer', }
+SIMPLE_JWT = {
+    'AUTH_HEADER_TYPES': ('JWT',),
+}
+
+DJOSER = {
+    'USER_CREATE_PASSWORD_RETYPE': True,
+    'PASSWORD_RESET_CONFIRM_URL': '#/password/reset/confirm/{uid}/{token}',
+    'USERNAME_RESET_CONFIRM_URL': '#/username/reset/confirm/{uid}/{token}',
+    'ACTIVATION_URL': '#/activate/{uid}/{token}',
+    # 'SEND_ACTIVATION_EMAIL': True,
+    'SERIALIZERS': {
+        'user_create': 'auth_app.api.serializers.UserCreateSerializer',
+        'user': 'auth_app.api.serializers.UserCreateSerializer',
+    },
+    'EMAIL': {
+        'password_reset': 'auth_app.email.AwesomeActivationEmail',
+    }
+}
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -141,12 +163,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-REST_USE_JWT = True
-
-JWT_AUTH = {
-    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=2)
-}
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
@@ -163,12 +179,12 @@ LOGOUT_REDIRECT_URL = '/?next=/home/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static_cdn')
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media_cdn')
 
-
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',

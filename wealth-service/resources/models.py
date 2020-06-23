@@ -2,7 +2,7 @@ from decimal import Decimal
 
 from django.db import models
 from django.db.models import Sum
-from users.models import InvestorUser
+from auth_app.models import InvestorUser
 
 from djmoney.models.fields import MoneyField
 
