@@ -6,7 +6,7 @@ class MarketData(object):
         pass
 
     @staticmethod
-    def get_metal_market_price(name, unit, currency, service_name):
+    def get_metal_market_price(name, unit, currency):
         if name == 'gold999':
             if unit == 'oz':
                 return Decimal(7300)

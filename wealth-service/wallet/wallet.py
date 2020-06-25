@@ -41,8 +41,7 @@ class Wallet(object):
         if metal:
             single_unit_value = MarketData.get_metal_market_price(name=name,
                                                                   unit=metal.unit,
-                                                                  currency=self.owner.my_currency,
-                                                                  service_name='my-service')
+                                                                  currency=self.owner.my_currency)
             value = single_unit_value * metal.amount
         return value.__round__(2)
 
@@ -52,8 +51,7 @@ class Wallet(object):
             amount = Metal.objects.get_total_metal_amount(owner=self.owner, name=name, unit=unit[0])
             single_unit_value = MarketData.get_metal_market_price(name=name,
                                                                   unit=unit[0],
-                                                                  currency=self.owner.my_currency,
-                                                                  service_name='my-service')
+                                                                  currency=self.owner.my_currency)
             v = single_unit_value * amount
             value += v
         return value.__round__(2)
