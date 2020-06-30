@@ -59,6 +59,9 @@ def metal_wallet(request, slug=None, resource_id=None):
     else:
         data = get_all_metals_wallet(wallet_inst=wallet, currency=request.user.my_currency)
 
+    if data["metal_value"] == 0:
+        return Response(status=status.HTTP_503_SERVICE_UNAVAILABLE)
+
     instance = MetalWalletData(**data)
     serializer = MetalWalletSerializer(instance)
     return Response(serializer.data)
@@ -79,6 +82,10 @@ def wallet(request):
     wallet = Wallet(owner=request.user)
 
     metal_value = wallet.get_all_metals_value()
+
+    if metal_value == 0:
+        return Response(status=status.HTTP_503_SERVICE_UNAVAILABLE)
+
     my_cash = wallet.get_all_my_cash()
     my_fortune = metal_value + my_cash
     if metal_value is None:
