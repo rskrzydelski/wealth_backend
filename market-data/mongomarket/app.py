@@ -24,7 +24,12 @@ def get_metal_price(name):
     if not db:
         return None
 
-    document = db['metals'].find_one({name: {"$exists": True}})
+    try:
+        document = db['metals'].find_one({name: {"$exists": True}})
+    except pymongo.errors.ServerSelectionTimeoutError:
+        print("ServerSelectionTimeoutError")
+        document = None
+
     return document
 
 
@@ -32,7 +37,11 @@ def set_metal_price(name, value, currency, unit):
     db = _get_db()
     query = {name: {"$exists": True}}
     new_query = {"$set": {name: value, 'currency': currency, 'unit': unit}}
-    db['metals'].update_one(query, new_query, upsert=True)
+
+    try:
+        db['metals'].update_one(query, new_query, upsert=True)
+    except pymongo.errors.ServerSelectionTimeoutError:
+        print("ServerSelectionTimeoutError")
 
 
 
