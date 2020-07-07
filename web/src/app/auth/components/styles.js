@@ -1,47 +1,72 @@
 import styled from 'styled-components'
 
-export const TitleHeader = styled.h4`
-  text-align: center;
-  margin-right: 20px;
+export const Grid = styled.div`
+
 `
 
-export const Container = styled.div`
+export const Row = styled.div`
+  display: flex;
+`
+
+export const Col = styled.div`
+  flex: ${(props) => props.size};
+`
+
+export const Form = styled.div`
   background: #2b2e39;
-  margin: 0 auto;
-  width: 80%;
-  max-width: 600px;
-  padding: 14px;
+  text-align: center;
   border-radius: 14px;
-  margin-top: 14px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  margin-left: 20px;
+  margin-right: 10px;
+`
+export const Welcome = styled.div`
+  background: #111519;
+  margin-right: 10px;
+  margin-top: 50px;
+  margin-left: 50px;
+`
+
+export const TitleHeader = styled.h1`
+  font-size: 20px;
+`
+export const Label = styled.label`
+  margin-top: 10px;
+  font-size: 14px;
 `
 
 export const TextInput = styled.input`
   padding: 5px;
-  font-size: .7em;
+  border-radius: 10px;
+  font-size: 12px;
   background: #232632;
   color: #d3d4d6;
   width: 100%;
   margin-right: 7px;
   margin-bottom: 10px;
-  border: 0px;
-  -webkit-apperance: none;
+  text-algin: center;
 `
 
 export const Button = styled.button`
   background: #232632;
-  color: #00a7fa;
+  border-radius: 10px;
+  color: gold;
   width: 30%;
   height: 32px;
   font-size: 0.9em;
-  border: 2px;
-  margin-top: 10px;
-  margin-bottom: 10px;
-  margin-right: 10px;
-  margin-left: 10px;
-  display: block;
-  max-width: 300px;
-  margin: auto;
+  margin: 10px auto;
   justify-content: center;
   align-items: center;
+  border: 1px solid gold;
   &:hover { background: #555; }
+`
+
+export const Container = styled.div`
+
+`
+
+export const Paragraf = styled.p`
+  font-size: 15px;
+  font-family: 'Courgette', cursive;
 `

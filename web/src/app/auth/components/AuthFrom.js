@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { TitleHeader, TextInput, Button } from './styles'
+import { TitleHeader, TextInput, Button, Label } from './styles'
 
 class AuthForm extends Component {
   constructor (props) {
@@ -18,21 +18,20 @@ class AuthForm extends Component {
 
   render () {
     const { labels } = this.props
-    const { title } = this.props
+    const { btn_label } = this.props
     const { handleConfirm } = this.props
-
     const lbs = labels.map((lb) => {
       return (
         <>
-          <label>
-            {lb.title}
+          <Label>
             <TextInput
               type={lb.type}
               name={lb.name}
+              placeholder={lb.placeholder}
               value={this.state[lb.name]}
               onChange={this.handleChange}
             />
-          </label>
+          </Label>
           <br />
         </>
       )
@@ -41,9 +40,8 @@ class AuthForm extends Component {
 
     return (
       <>
-        <TitleHeader>{title}</TitleHeader>
         {lbs}
-        <Button onClick={() => handleConfirm(this.state)}>{title}</Button>
+        <Button onClick={() => handleConfirm(this.state)}>{btn_label}</Button>
       </>
     )
   }

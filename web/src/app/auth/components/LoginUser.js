@@ -5,7 +5,7 @@ import * as api from '../../../api/api'
 import { loginUrl } from '../../../api/routes'
 import * as actions from '../duck/actions'
 
-import { Container } from './styles'
+import { Row, Col, Form, Welcome, Paragraf } from './styles'
 import { loginLabels } from './labels'
 import AuthForm from './AuthFrom'
 
@@ -34,9 +34,21 @@ class LoginUser extends Component {
 
   render () {
     return (
-      <Container>
-        <AuthForm title='Login' labels={loginLabels} handleConfirm={this.onHandleLogin} />
-      </Container>
+      <Row>
+        <Col size={1}>
+          <Form>
+            <AuthForm btn_label='Login' labels={loginLabels} handleConfirm={this.onHandleLogin} />
+          </Form>
+        </Col>
+        <Col size={3}>
+          <Welcome>
+            <Paragraf>Wealth is application for store resources such as gold, silver, cash.</Paragraf>
+            <Paragraf>You can add your gold, silver and cash, see current price, see how money you spend</Paragraf>
+            <Paragraf>on particular resource or on all resources and finally see your profit or your lost.</Paragraf>
+            <Paragraf>Currently you can choose following currencies: PLN, USD, CHF, EUR.</Paragraf>
+          </Welcome>
+        </Col>
+      </Row>
     )
   }
 }

@@ -3,8 +3,10 @@ import { Redirect } from 'react-router-dom'
 
 import * as api from '../../../api/api'
 import { registerUrl } from '../../../api/routes'
+import { registerLabels } from './labels'
+import AuthForm from './AuthFrom'
 
-import { Container, TitleHeader, TextInput, Button } from './styles'
+import { Row, Col, Form, Welcome, Paragraf } from './styles'
 
 class RegUser extends Component {
   constructor (props) {
@@ -40,58 +42,22 @@ class RegUser extends Component {
   render () {
     return (
       this.state.register_success === true
-        ? <Redirect to='/login' />
-        : <Container>
-          <TitleHeader>Registration</TitleHeader>
-          <label>
-          Username:
-            <TextInput
-              type='text'
-              name='username'
-              value={this.state.register_data.username}
-              onChange={this.handleChange}
-            />
-          </label>
-          <br />
-          <label>
-            Email:
-            <TextInput
-              type='email'
-              name='email'
-              value={this.state.register_data.email}
-              onChange={this.handleChange}
-            />
-          </label>
-          <br />
-          <label>
-            Password:
-            <TextInput
-              type='password'
-              name='password'
-              value={this.state.register_data.password1}
-              onChange={this.handleChange}
-            />
-          </label>
-          <label>
-            Password2:
-            <TextInput
-              type='password'
-              name='password2'
-              value={this.state.register_data.password2}
-              onChange={this.handleChange}
-            />
-          </label>
-          <label>
-            My currency:
-            <TextInput
-              type='text'
-              name='my_currency'
-              value={this.state.register_data.my_currency}
-              onChange={this.handleChange}
-            />
-          </label>
-          <Button onClick={this.handleReg}>Register</Button>
-        </Container>
+        ? <Redirect to='/login' /> :
+        <Row>
+          <Col size={1}>
+            <Form>
+              <AuthForm btn_label='Register' labels={registerLabels} handleConfirm={this.onHandleLogin} />
+            </Form>
+          </Col>
+          <Col size={3}>
+            <Welcome>
+              <Paragraf>Wealth is application for store resources such as gold, silver, cash.</Paragraf>
+              <Paragraf>You can add your gold, silver and cash, see current price, see how money you spend</Paragraf>
+              <Paragraf>on particular resource or on all resources and finally see your profit or your lost.</Paragraf>
+              <Paragraf>Currently you can choose following currencies: PLN, USD, CHF, EUR.</Paragraf>
+            </Welcome>
+          </Col>
+        </Row>
     )
   }
 }

@@ -19,7 +19,7 @@ import Cash from '../../resources/components/Cash'
 const PrivateRoutes = ({ component: Component, auth }) => (
   <Route render={props => auth === true
     ? <Component auth={auth} {...props} />
-    : <Redirect to={{ pathname: '/login' }} />}
+    : <Redirect to={{ pathname: '/register' }} />}
   />
 )
 

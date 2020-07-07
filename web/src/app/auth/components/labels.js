@@ -1,21 +1,45 @@
 export const loginLabels = [
   {
-    title: 'Username',
     type: 'text',
-    name: 'username'
+    name: 'username',
+    placeholder: 'username'
   },
   {
-    title: 'Email',
     type: 'email',
-    name: 'email'
+    name: 'email',
+    placeholder: 'email'
   },
   {
-    title: 'Password',
     type: 'password',
-    name: 'password'
+    name: 'password',
+    placeholder: 'password'
   }
 ]
 
 export const registerLabels = [
-  {}
+  {
+    type: 'text',
+    name: 'username',
+    placeholder: 'username'
+  },
+  {
+    type: 'email',
+    name: 'email',
+    placeholder: 'email'
+  },
+  {
+    type: 'password',
+    name: 'password',
+    placeholder: 'password'
+  },
+  {
+    type: 'password',
+    name: 'password2',
+    placeholder: 'retype password'
+  },
+  {
+    type: 'text',
+    name: 'my_currency',
+    placeholder: 'my currency'
+  }
 ]
