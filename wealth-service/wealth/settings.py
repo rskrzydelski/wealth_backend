@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'auth_app.apps.AuthAppConfig',
     'resources.apps.ResourcesConfig',
     'wallet.apps.WalletConfig',
+    'market.apps.MarketConfig',
 ]
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
