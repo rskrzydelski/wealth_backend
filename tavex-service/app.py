@@ -3,7 +3,7 @@ from tavex import MarketTavexPrices
 import mongomarket
 
 
-gold_spread = 0.96
+gold_spread = 0.97
 silver_spread = 0.85
 
 
@@ -41,7 +41,7 @@ def tavex_market():
             mongomarket.set_metal_price('silver800oz', silver800oz, 'PLN', 'oz')
             mongomarket.set_metal_price('silver800g', silver800g, 'PLN', 'g')
 
-        time.sleep(60)
+        time.sleep(120)
 
 
 if __name__ == '__main__':
