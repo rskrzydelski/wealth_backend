@@ -17,7 +17,7 @@ class Resource(models.Model):
     bought_price = MoneyField(max_digits=10,
                               decimal_places=2,
                               default_currency='PLN')
-    date_of_bought = models.DateTimeField(auto_now_add=False)
+    date_of_bought = models.DateField(auto_now_add=False)
 
     class Meta:
         abstract = True
@@ -126,7 +126,7 @@ class Cash(models.Model):
     objects = CashManager()
 
     owner = models.ForeignKey(InvestorUser, on_delete=models.CASCADE, default=1)
-    save_date = models.DateTimeField(auto_now_add=False)
+    save_date = models.DateField(auto_now_add=False)
     my_cash = MoneyField(max_digits=10,
                          decimal_places=2,
                          null=True, blank=True,

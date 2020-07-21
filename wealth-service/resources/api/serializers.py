@@ -6,6 +6,7 @@ class MetalListSerializer(ModelSerializer):
     class Meta:
         model = Metal
         fields = [
+            'id',
             'name',
             'amount',
             'unit',
@@ -58,6 +59,7 @@ class CashListSerializer(ModelSerializer):
     class Meta:
         model = Cash
         fields = [
+            'id',
             'my_currency',
             'save_date',
             'my_cash',
