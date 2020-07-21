@@ -1,5 +1,4 @@
 from rest_framework.response import Response
-from rest_framework import status
 from rest_framework.decorators import api_view
 
 from ..market_data import MarketData
@@ -24,7 +23,7 @@ def market(request):
 
     if is_query_valid(name, unit):
         metal_price = MarketData.get_metal_market_price(name=name, unit=unit, currency=request.user.my_currency)
-        data = {'name': name, 'unit': 'oz', 'price': metal_price, 'currency': request.user.my_currency}
+        data = {'name': name, 'unit': unit, 'price': metal_price.__round__(2), 'currency': request.user.my_currency}
     else:
         data = {'error': f"please provide following query for name: {', '.join(metals)} and unit: {', '.join(units)}"}
     return Response(data)
