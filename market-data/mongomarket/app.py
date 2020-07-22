@@ -18,14 +18,56 @@ def _delete_db():
     cli.drop_database('market')
 
 
-def get_metal_price(name):
+def delete_doc(query):
     db = _get_db()
 
     if not db:
         return None
 
     try:
-        document = db['metals'].find_one({name: {"$exists": True}})
+        db['metals'].delete_one(query)
+    except pymongo.errors.ServerSelectionTimeoutError:
+        print("ServerSelectionTimeoutError")
+
+
+def get_doc(query):
+    db = _get_db()
+
+    if not db:
+        return None
+
+    try:
+        doc = db['metals'].find_one(query)
+    except pymongo.errors.ServerSelectionTimeoutError:
+        print("ServerSelectionTimeoutError")
+        doc = None
+
+    return doc
+
+
+def get_content():
+    db = _get_db()
+
+    if not db:
+        return None
+
+    try:
+        documents = db['metals'].find()
+    except pymongo.errors.ServerSelectionTimeoutError:
+        print("ServerSelectionTimeoutError")
+        documents = None
+
+    return documents
+
+
+def get_metal_price(name, currency):
+    db = _get_db()
+
+    if not db:
+        return None
+
+    try:
+        document = db['metals'].find_one({"$and": [{name: {"$exists": True}}, {'currency': currency}]})
     except pymongo.errors.ServerSelectionTimeoutError:
         print("ServerSelectionTimeoutError")
         document = None
@@ -35,7 +77,7 @@ def get_metal_price(name):
 
 def set_metal_price(name, value, currency, unit):
     db = _get_db()
-    query = {name: {"$exists": True}}
+    query = {"$and": [{name: {"$exists": True}}, {'currency': currency}]}
     new_query = {"$set": {name: value, 'currency': currency, 'unit': unit}}
 
     try:
