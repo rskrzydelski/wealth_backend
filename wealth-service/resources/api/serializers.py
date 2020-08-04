@@ -6,6 +6,7 @@ class MetalListSerializer(ModelSerializer):
     class Meta:
         model = Metal
         fields = [
+            'owner',
             'id',
             'name',
             'amount',
@@ -20,6 +21,7 @@ class MetalCreateSerializer(ModelSerializer):
     class Meta:
         model = Metal
         fields = [
+            'owner',
             'name',
             'bought_price',
             'bought_price_currency',
@@ -50,15 +52,13 @@ class MetalDetailSerializer(ModelSerializer):
         return str(obj.bought_price)
 
 
-
-
-
 class CashListSerializer(ModelSerializer):
     my_currency = SerializerMethodField('get_my_currency')
 
     class Meta:
         model = Cash
         fields = [
+            'owner',
             'id',
             'my_currency',
             'save_date',
@@ -73,6 +73,7 @@ class CashCreateSerializer(ModelSerializer):
     class Meta:
         model = Cash
         fields = [
+            'owner',
             'save_date',
             'my_cash',
         ]

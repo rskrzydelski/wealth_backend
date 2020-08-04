@@ -19,6 +19,9 @@ class MetalLstCreateAPIView(ListCreateAPIView):
         else:
             return MetalCreateSerializer
 
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
+
     def get_queryset(self):
         # collect query strings
         query_name = self.request.GET.get('name')
@@ -59,7 +62,7 @@ class CashLstCreateAPIView(ListCreateAPIView):
         return Response(serializer.data)
 
     def perform_create(self, serializer):
-        serializer.save(my_cash_currency=self.request.user.my_currency)
+        serializer.save(owner=self.request.user, my_cash_currency=self.request.user.my_currency)
 
 
 class CashDetailUpdateDelAPIView(RetrieveUpdateDestroyAPIView):
