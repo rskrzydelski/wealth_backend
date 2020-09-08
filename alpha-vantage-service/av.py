@@ -18,7 +18,11 @@ class AvAPI(object):
 
     @staticmethod
     def _get(url):
-        response = requests.get(url)
+        try:
+            response = requests.get(url)
+        except requests.exceptions.ConnectionError:
+            print('ConnectionError')
+            return None
 
         if response.status_code != 200:
             return None
