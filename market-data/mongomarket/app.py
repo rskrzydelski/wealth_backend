@@ -13,7 +13,7 @@ def _list_db():
     print(dblist)
 
 
-def _delete_db():
+def delete_db():
     cli = pymongo.MongoClient("mongodb://localhost:27017/")
     cli.drop_database('market')
 
@@ -60,14 +60,14 @@ def get_content():
     return documents
 
 
-def get_metal_price(name, currency):
+def get_metal_price(name, unit, currency):
     db = _get_db()
 
     if not db:
         return None
-
     try:
-        document = db['metals'].find_one({"$and": [{name: {"$exists": True}}, {'currency': currency}]})
+        query = {'name': name, 'unit': unit, 'currency': currency}
+        document = db['metals'].find_one(query)
     except pymongo.errors.ServerSelectionTimeoutError:
         print("ServerSelectionTimeoutError")
         document = None
@@ -75,20 +75,12 @@ def get_metal_price(name, currency):
     return document
 
 
-def set_metal_price(name, value, currency, unit):
+def set_metal_price(name, unit, currency, value):
     db = _get_db()
-    query = {"$and": [{name: {"$exists": True}}, {'currency': currency}]}
-    new_query = {"$set": {name: value, 'currency': currency, 'unit': unit}}
+    query = {'name': name, 'unit': unit, 'currency': currency}
+    new_query = {"$set": {'name': name, 'unit': unit, 'currency': currency, 'value': value}}
 
     try:
         db['metals'].update_one(query, new_query, upsert=True)
     except pymongo.errors.ServerSelectionTimeoutError:
         print("ServerSelectionTimeoutError")
-
-
-
-
-
-
-
-
