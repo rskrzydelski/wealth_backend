@@ -135,3 +135,62 @@ class Cash(models.Model):
     def __str__(self):
         return '{} cash {}'.format(self.owner.username, self.my_cash)
 
+
+class CryptoManager(models.Manager):
+    def get_crypto_list(self, owner=None, name=None):
+        """
+        CryptoManager:
+        get_crypto_list - returns list of particular crypto or all crypto
+        :param name [btc, bch, ..., none]
+        :param owner
+        :returns (Queryset) [btc list, bch list, ... , all crypto list]
+        """
+        if name:
+            qs = super(CryptoManager, self).filter(owner=owner, name=name)
+        else:
+            qs = super(CryptoManager, self).filter(owner=owner)
+        return qs
+
+    def get_total_crypto_amount(self, owner=None, name=None):
+        """
+        CryptoManager:
+        get_total_crypto_amount - returns total amount of particular crypto
+        :param name [btc, bch, ..., none]
+        :param owner
+        :returns (Decimal) [btc amount, bch amount, ..., None]
+        """
+        if name is None:
+            return None
+
+        amount = super(CryptoManager, self).filter(owner=owner, name=name).aggregate(total_amount=Sum('amount'))
+        return amount.get('total_amount') or Decimal(0)
+
+
+class Crypto(Resource):
+    """
+    Crypto
+    Cryptocurrencies data
+    """
+    objects = CryptoManager()
+
+    CRYPTO_CHOICES = [
+        ('btc', 'BTC'),
+        ('bch', 'BCH'),
+        ('eth', 'ETH'),
+        ('xrp', 'XRP'),
+        ('ltc', 'LTC'),
+        ('dot', 'DOT'),
+        ('neo', 'NEO'),
+        ('flm', 'FLM'),
+        ('theta', 'THETA'),
+    ]
+    name = models.CharField(
+        max_length=10,
+        choices=CRYPTO_CHOICES,
+        default='eth',
+    )
+    amount = models.DecimalField(max_digits=20, decimal_places=10, default=0)
+    description = models.TextField(blank=True, help_text='Type some information about this transaction (optional)')
+
+    def __str__(self):
+        return f'{self.owner.username} crypto: '
