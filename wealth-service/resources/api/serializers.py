@@ -1,5 +1,5 @@
 from rest_framework.serializers import ModelSerializer, SerializerMethodField
-from resources.models import Metal, Cash
+from resources.models import Metal, Cash, Crypto
 
 
 class MetalListSerializer(ModelSerializer):
@@ -87,3 +87,50 @@ class CashDetailSerializer(ModelSerializer):
             'save_date',
             'my_cash',
         ]
+
+
+class CryptoListSerializer(ModelSerializer):
+    class Meta:
+        model = Crypto
+        fields = [
+            'owner',
+            'id',
+            'name',
+            'amount',
+            'bought_price',
+            'bought_price_currency',
+            'date_of_bought',
+        ]
+
+
+class CryptoCreateSerializer(ModelSerializer):
+    class Meta:
+        model = Crypto
+        fields = [
+            'owner',
+            'name',
+            'bought_price',
+            'bought_price_currency',
+            'amount',
+            'date_of_bought',
+            'description',
+        ]
+
+
+class CryptoDetailSerializer(ModelSerializer):
+    bought_price = SerializerMethodField('get_bought_price')
+
+    class Meta:
+        model = Crypto
+        fields = [
+            'owner',
+            'name',
+            'bought_price',
+            'bought_price_currency',
+            'amount',
+            'date_of_bought',
+            'description',
+        ]
+
+    def get_bought_price(self, obj):
+        return str(obj.bought_price)
