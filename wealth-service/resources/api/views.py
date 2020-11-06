@@ -8,8 +8,11 @@ from .serializers import (
     CashListSerializer,
     CashCreateSerializer,
     CashDetailSerializer,
+    CryptoListSerializer,
+    CryptoCreateSerializer,
+    CryptoDetailSerializer,
 )
-from resources.models import Metal, Cash
+from resources.models import Metal, Cash, Crypto
 
 
 class MetalLstCreateAPIView(ListCreateAPIView):
@@ -70,4 +73,37 @@ class CashDetailUpdateDelAPIView(RetrieveUpdateDestroyAPIView):
 
     def get_queryset(self):
         queryset = Cash.objects.filter(owner=self.request.user)
+        return queryset
+
+
+class CryptoLstCreateAPIView(ListCreateAPIView):
+    def get_serializer_class(self):
+        if self.request.method == 'GET':
+            return CryptoListSerializer
+        else:
+            return CryptoCreateSerializer
+
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
+
+    def get_queryset(self):
+        # collect query strings
+        query_name = self.request.GET.get('name')
+        if query_name:
+            queryset = Crypto.objects.filter(owner=self.request.user, name=query_name)
+        else:
+            queryset = Crypto.objects.filter(owner=self.request.user)
+        return queryset
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        serializer = self.get_serializer_class()(queryset, many=True)
+        return Response(serializer.data)
+
+
+class CryptoDetailDelUpdateAPIView(RetrieveUpdateDestroyAPIView):
+    serializer_class = CryptoDetailSerializer
+
+    def get_queryset(self):
+        queryset = Crypto.objects.filter(owner=self.request.user)
         return queryset
