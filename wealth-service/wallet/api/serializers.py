@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from ..wallet import MetalWalletData, CashWalletData, WalletData
+from ..wallet import MetalWalletData, CashWalletData, CryptoWalletData, WalletData
 
 
 class MetalWalletSerializer(serializers.Serializer):
@@ -32,6 +32,25 @@ class CashWalletSerializer(serializers.Serializer):
     def update(self, instance, validated_data):
         instance.my_currency = validated_data.get('my_currency', instance.my_currency)
         instance.cash = validated_data.get('cash', instance.cash)
+
+
+class CryptoWalletSerializer(serializers.Serializer):
+    name = serializers.CharField(max_length=20)
+    my_currency = serializers.CharField(max_length=4)
+    crypto_value = serializers.DecimalField(max_digits=10, decimal_places=2)
+    cash_spend = serializers.DecimalField(max_digits=10, decimal_places=2)
+    profit = serializers.DecimalField(max_digits=10, decimal_places=2)
+
+    def create(self, validated_data):
+        return CryptoWalletData(**validated_data)
+
+    def update(self, instance, validated_data):
+        instance.name = validated_data.get('name', instance.name)
+        instance.my_currency = validated_data.get('my_currency', instance.my_currency)
+        instance.crypto_value = validated_data.get('crypto_value', instance.crypto_value)
+        instance.cash_spend = validated_data.get('cash_spend', instance.cash_spend)
+        instance.profit = validated_data.get('profit', instance.profit)
+        return instance
 
 
 class WalletSerializer(serializers.Serializer):
