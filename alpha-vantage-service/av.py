@@ -1,3 +1,4 @@
+import time
 import requests
 import collections
 
@@ -30,4 +31,5 @@ class AvAPI(object):
         return Resource(results['1. From_Currency Code'], results['3. To_Currency Code'], results['5. Exchange Rate'])
 
     def get_resource(self, from_currency="", to_currency=""):
+        time.sleep(5)
         return self._get(from_currency, to_currency)

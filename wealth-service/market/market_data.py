@@ -12,3 +12,7 @@ class MarketData(object):
         if not doc:
             return Decimal(0)
         return Decimal(doc.get('value')) if doc.get('value') is not None else Decimal(0)
+
+    @staticmethod
+    def get_crypto_market_price(name, currency):
+        return Decimal(0)

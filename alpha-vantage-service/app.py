@@ -16,6 +16,46 @@ class AvMarketCollector:
         self.usdeur = self.api.get_resource(from_currency='USD', to_currency='EUR')
         self.usdchf = self.api.get_resource(from_currency='USD', to_currency='CHF')
 
+        self.btc = self.api.get_resource(from_currency='BTC', to_currency='USD')
+        self.bch = self.api.get_resource(from_currency='BCH', to_currency='USD')
+        self.eth = self.api.get_resource(from_currency='ETH', to_currency='USD')
+        self.xrp = self.api.get_resource(from_currency='XRP', to_currency='USD')
+        self.ltc = self.api.get_resource(from_currency='LTC', to_currency='USD')
+        self.dot = self.api.get_resource(from_currency='DOT', to_currency='USD')
+        self.neo = self.api.get_resource(from_currency='NEO', to_currency='USD')
+        self.theta = self.api.get_resource(from_currency='THETA', to_currency='USD')
+
+    def collect_crypto_records(self):
+        self._collect_crypto_record(self.btc)
+        self._collect_crypto_record(self.bch)
+        self._collect_crypto_record(self.eth)
+        self._collect_crypto_record(self.xrp)
+        self._collect_crypto_record(self.ltc)
+        self._collect_crypto_record(self.dot)
+        self._collect_crypto_record(self.neo)
+        self._collect_crypto_record(self.theta)
+
+    def _collect_crypto_record(self, crypto_resource_obj=None):
+        records = []
+        if crypto_resource_obj:
+            val = Decimal(crypto_resource_obj.price)
+            value = str(val.__round__(2))
+            records.append({'name': crypto_resource_obj.ticker_from.lower(), 'currency': 'USD', 'value': value})
+            if self.usdchf:
+                val = Decimal(crypto_resource_obj.price) * Decimal(self.usdchf.price)
+                value = str(val.__round__(2))
+                records.append({'name': crypto_resource_obj.ticker_from.lower(), 'currency': 'CHF', 'value': value})
+            if self.usdeur:
+                val = Decimal(crypto_resource_obj.price) * Decimal(self.usdeur.price)
+                value = str(val.__round__(2))
+                records.append({'name': crypto_resource_obj.ticker_from.lower(), 'currency': 'EUR', 'value': value})
+            if self.usdpln:
+                val = Decimal(crypto_resource_obj.price) * Decimal(self.usdpln.price)
+                value = str(val.__round__(2))
+                records.append({'name': crypto_resource_obj.ticker_from.lower(), 'currency': 'PLN', 'value': value})
+        for r in records:
+            self._set_mongo_crypto_data(r)
+
     def collect_metal_records(self):
         if self.gold:
             self._collect_gold_records(self.gold.price, 'USD', 1.0)
@@ -95,6 +135,15 @@ class AvMarketCollector:
             value=record.get('value'))
 
     @staticmethod
+    def _set_mongo_crypto_data(record):
+        if not record.get('name') and not record.get('currency') and not record.get('value'):
+            return
+        mongomarket.set_crypto_price(
+            name=record.get('name'),
+            currency=record.get('currency'),
+            value=record.get('value'))
+
+    @staticmethod
     def _convert_price_from_oz_to_other_unit(oz_price, unit_to):
         value = None
         try:
@@ -124,14 +173,22 @@ def alpha_vantage_market():
     while True:
         collector.get_market_data_from_api()
         collector.collect_metal_records()
+        collector.collect_crypto_records()
 
-        documents = mongomarket.get_content()
+        documents = mongomarket.get_content('metals')
+        print("Metals collection:")
+        for doc in documents:
+            print(doc)
+        print(" ")
+
+        documents = mongomarket.get_content('cryptos')
+        print("Cryptos collection:")
         for doc in documents:
             print(doc)
         print(" ")
         print(" ")
         print("go to sleep ")
-        time.sleep(120)
+        time.sleep(60)
 
 
 if __name__ == '__main__':
