@@ -15,4 +15,7 @@ class MarketData(object):
 
     @staticmethod
     def get_crypto_market_price(name, currency):
-        return Decimal(0)
+        doc = mongomarket.get_crypto_price(name, currency)
+        if not doc:
+            return Decimal(0)
+        return Decimal(doc.get('value')) if doc.get('value') is not None else Decimal(0)
