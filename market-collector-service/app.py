@@ -110,6 +110,9 @@ class AvMarketCollector:
         for trial in gold_trials:
             d = {}
             oz_value = Decimal(api_gold_999_oz_usd_value) * Decimal(exchange_rate)
+            # in case of 585 and 333 take into account higher spread.
+            if trial == '585' or trial == '333':
+                oz_value = oz_value * Decimal(0.95)
             val = self._convert_price_from_999_to_other(trial, oz_value)
             ls = [self._convert_price_from_oz_to_other_unit(val, u) for u in units]
             z = list(zip(units, ls))
@@ -132,6 +135,9 @@ class AvMarketCollector:
         for trial in silver_trials:
             d = {}
             oz_value = Decimal(api_silver_999_oz_usd_value) * Decimal(exchange_rate)
+            # in case of 800 take into account higher spread.
+            if trial == '800':
+                oz_value = oz_value * Decimal(0.75)
             val = self._convert_price_from_999_to_other(trial, oz_value)
             ls = [self._convert_price_from_oz_to_other_unit(val, u) for u in units]
             z = list(zip(units, ls))
