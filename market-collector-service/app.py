@@ -1,14 +1,17 @@
 import time
 from decimal import Decimal
-from av import AvAPI
 import mongomarket
+import alphavantage
+import coinmarketcap
 
 
 class AvMarketCollector:
     def __init__(self):
-        self.api = AvAPI()
+        self.api = alphavantage.AvAPI()
+        self.coin_market_cap = coinmarketcap.CoinMarketCapScrapper()
 
     def get_market_data_from_api(self):
+        print("Start query api endpoints...")
         self.gold = self.api.get_resource(from_currency='XAU', to_currency='USD')
         self.silver = self.api.get_resource(from_currency='XAG', to_currency='USD')
 
@@ -24,6 +27,24 @@ class AvMarketCollector:
         self.dot = self.api.get_resource(from_currency='DOT', to_currency='USD')
         self.neo = self.api.get_resource(from_currency='NEO', to_currency='USD')
         self.theta = self.api.get_resource(from_currency='THETA', to_currency='USD')
+        self.flm = self.coin_market_cap.fetch_crypto_price("FLM")
+        #
+        # print(f"self.gold {self.gold}")
+        # print(f"self.silver {self.silver}")
+        #
+        # print(f"self.usdpln {self.usdpln}")
+        # print(f"self.usdeur {self.usdeur}")
+        # print(f"self.usdchf {self.usdchf}")
+        #
+        # print(f"self.btc {self.btc}")
+        # print(f"self.bch {self.bch}")
+        # print(f"self.eth {self.eth}")
+        # print(f"self.xrp {self.xrp}")
+        # print(f"self.ltc {self.ltc}")
+        # print(f"self.dot {self.dot}")
+        # print(f"self.neo {self.neo}")
+        # print(f"self.flm {self.flm}")
+        # print(f"self.theta {self.theta}")
 
     def collect_crypto_records(self):
         self._collect_crypto_record(self.btc)
@@ -33,6 +54,7 @@ class AvMarketCollector:
         self._collect_crypto_record(self.ltc)
         self._collect_crypto_record(self.dot)
         self._collect_crypto_record(self.neo)
+        self._collect_crypto_record(self.flm)
         self._collect_crypto_record(self.theta)
 
     def _collect_crypto_record(self, crypto_resource_obj=None):
@@ -188,7 +210,7 @@ def alpha_vantage_market():
         print(" ")
         print(" ")
         print("go to sleep ")
-        time.sleep(60)
+        time.sleep(10)
 
 
 if __name__ == '__main__':
