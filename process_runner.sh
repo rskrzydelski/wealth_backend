@@ -3,9 +3,9 @@
 # assign port number from Dockerfile
 PORT=$1
 
-# start alpha-vantage-service
+# start market-collector-service
 echo "starting alpha-vantage-service ..."
-cd alpha-vantage-service
+cd market-collector-service
 python app.py &
 cd ..
 echo "done."

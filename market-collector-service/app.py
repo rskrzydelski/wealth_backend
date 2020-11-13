@@ -28,23 +28,6 @@ class AvMarketCollector:
         self.neo = self.api.get_resource(from_currency='NEO', to_currency='USD')
         self.theta = self.api.get_resource(from_currency='THETA', to_currency='USD')
         self.flm = self.coin_market_cap.fetch_crypto_price("FLM")
-        #
-        # print(f"self.gold {self.gold}")
-        # print(f"self.silver {self.silver}")
-        #
-        # print(f"self.usdpln {self.usdpln}")
-        # print(f"self.usdeur {self.usdeur}")
-        # print(f"self.usdchf {self.usdchf}")
-        #
-        # print(f"self.btc {self.btc}")
-        # print(f"self.bch {self.bch}")
-        # print(f"self.eth {self.eth}")
-        # print(f"self.xrp {self.xrp}")
-        # print(f"self.ltc {self.ltc}")
-        # print(f"self.dot {self.dot}")
-        # print(f"self.neo {self.neo}")
-        # print(f"self.flm {self.flm}")
-        # print(f"self.theta {self.theta}")
 
     def collect_crypto_records(self):
         self._collect_crypto_record(self.btc)

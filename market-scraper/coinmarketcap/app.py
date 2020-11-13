@@ -4,8 +4,10 @@ import collections
 from bs4 import BeautifulSoup
 from decimal import InvalidOperation
 
+from datetime import datetime
 
-Resource = collections.namedtuple('Resource', ['ticker_from', 'ticker_to', 'price'])
+
+Resource = collections.namedtuple('Resource', ['ticker_from', 'ticker_to', 'price', 'timestamp'])
 
 class CoinMarketCapScrapper(object):
 
@@ -42,8 +44,9 @@ class CoinMarketCapScrapper(object):
         except (AttributeError, KeyError, IndexError, InvalidOperation) as e:
             print(e)
             return None
-
-        return Resource(ticker_from=crypto, ticker_to='USD', price=price)
+        now = datetime.now()
+        timestamp = now.strftime("%d-%m-%Y, %H:%M:%S")
+        return Resource(ticker_from=crypto, ticker_to='USD', price=price, timestamp=timestamp)
 
 
 if __name__ == '__main__':

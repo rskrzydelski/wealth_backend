@@ -2,8 +2,10 @@ import time
 import requests
 import collections
 
+from datetime import datetime
 
-Resource = collections.namedtuple('Resource', ['ticker_from', 'ticker_to', 'price'])
+
+Resource = collections.namedtuple('Resource', ['ticker_from', 'ticker_to', 'price', 'timestamp'])
 
 
 class AvAPI(object):
@@ -27,8 +29,13 @@ class AvAPI(object):
 
         if not results:
             return None
-
-        return Resource(results['1. From_Currency Code'], results['3. To_Currency Code'], results['5. Exchange Rate'])
+        now = datetime.now()
+        timestamp = now.strftime("%d-%m-%Y, %H:%M:%S")
+        return Resource(
+            results['1. From_Currency Code'],
+            results['3. To_Currency Code'],
+            results['5. Exchange Rate'],
+            timestamp)
 
     def get_resource(self, from_currency="", to_currency=""):
         time.sleep(5)
