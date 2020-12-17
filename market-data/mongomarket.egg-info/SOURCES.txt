@@ -1,8 +1,0 @@
-README.md
-setup.py
-mongomarket/__init__.py
-mongomarket/app.py
-mongomarket.egg-info/PKG-INFO
-mongomarket.egg-info/SOURCES.txt
-mongomarket.egg-info/dependency_links.txt
-mongomarket.egg-info/top_level.txt
