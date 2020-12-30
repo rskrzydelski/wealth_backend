@@ -4,7 +4,7 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="market-scraper",
+    name="coinmarketcapscrapper-lib",
     version="0.0.1",
     author="Rafal Skrzydelski",
     author_email="r.skrzydelski@gmail.com",
@@ -13,6 +13,7 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://github.com/pypa/sampleproject",
     packages=setuptools.find_packages(),
+    install_requires=['requests', 'bs4'],
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",

@@ -4,7 +4,7 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="mongomarket",
+    name="mongomarket-lib",
     version="0.0.1",
     author="Rafal Skrzydelski",
     author_email="r.skrzydelski@gmail.com",
@@ -12,7 +12,7 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/pypa/sampleproject",
-    packages=setuptools.find_packages(include=['mongomarket']),
+    packages=setuptools.find_packages(),
     install_requires=['pymongo'],
     classifiers=[
         "Programming Language :: Python :: 3",

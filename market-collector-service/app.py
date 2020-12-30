@@ -1,14 +1,14 @@
 import time
 from decimal import Decimal
-import mongomarket
-import alphavantage
-import coinmarketcap
+from mongomarket import mongomarket_tools
+from alphavantage import alphavantage_tools
+from coinmarketcapscrapper import coinmarketcapscrapper_tools
 
 
 class AvMarketCollector:
     def __init__(self):
-        self.api = alphavantage.AvAPI()
-        self.coin_market_cap = coinmarketcap.CoinMarketCapScrapper()
+        self.api = alphavantage_tools.AvAPI()
+        self.coin_market_cap = coinmarketcapscrapper_tools.CoinMarketCapScrapper()
 
     def get_market_data_from_api(self):
         print("Start query api endpoints...")
@@ -139,7 +139,7 @@ class AvMarketCollector:
     def _set_mongo_metal_data(record):
         if not record.get('name') and not record.get('unit') and not record.get('currency') and not record.get('value'):
             return
-        mongomarket.set_metal_price(
+        mongomarket_tools.set_metal_price(
             name=record.get('name'),
             unit=record.get('unit'),
             currency=record.get('currency'),
@@ -149,7 +149,7 @@ class AvMarketCollector:
     def _set_mongo_crypto_data(record):
         if not record.get('name') and not record.get('currency') and not record.get('value'):
             return
-        mongomarket.set_crypto_price(
+        mongomarket_tools.set_crypto_price(
             name=record.get('name'),
             currency=record.get('currency'),
             value=record.get('value'))
@@ -186,13 +186,13 @@ def alpha_vantage_market():
         collector.collect_metal_records()
         collector.collect_crypto_records()
 
-        documents = mongomarket.get_content('metals')
+        documents = mongomarket_tools.get_content('metals')
         print("Metals collection:")
         for doc in documents:
             print(doc)
         print(" ")
 
-        documents = mongomarket.get_content('cryptos')
+        documents = mongomarket_tools.get_content('cryptos')
         print("Cryptos collection:")
         for doc in documents:
             print(doc)
