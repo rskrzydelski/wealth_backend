@@ -21,7 +21,7 @@ WORKDIR /wealthy
 COPY . /wealthy/
 
 # set project enviroment variables
-# grab these via python os.environ
+# TODO: grab these via python os.environ
 ENV PORT=8888
 
 # set default enviroment variables
@@ -32,12 +32,16 @@ ENV DEBIAN_FRONTEND=noninteractive
 # install enviroment dependencies
 RUN pip3 install --upgrade pip
 
-# copy and install requirements.txt
-COPY requirements.txt /code/
+# install requirements.txt
 RUN pip3 install -r requirements.txt
 
-# install market-data mongodb handler
-RUN cd market-data/ && pip3 install .
+# install custom python libs
+# mongomarket lib
+RUN cd mongomarket-lib/ && python3 setup.py sdist bdist_wheel && pip install dist/mongomarket-lib-0.0.1.tar.gz
+# coinmarketcapscrapper lib
+RUN cd coinmarketcapscrapper-lib/ && python3 setup.py sdist bdist_wheel && pip install dist/coinmarketcapscrapper-lib-0.0.1.tar.gz
+# alphavantage lib
+RUN cd alphavantage-lib/ && python3 setup.py sdist bdist_wheel && pip install dist/alphavantage-lib-0.0.1.tar.gz
 
 EXPOSE 8888
 
